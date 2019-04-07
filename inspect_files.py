@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import json
 
 
-COLOMBIA_STATS = 'mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
+COLOMBIA_STATS = 'date/mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
 
 
 if __name__ == '__main__':
