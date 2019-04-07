@@ -26,8 +26,8 @@ def json_to_matrix(pairs: json, admins: Dict[str, int]) -> np.ndarray:
 
 
 if __name__ == '__main__':
-    admin_path = 'mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
-    mobility_path = path.join('Colombia-base-line-mobility',
+    admin_path = 'data/mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
+    mobility_path = path.join('data', 'Colombia-base-line-mobility',
                               'movement-day0.json')
 
     with open(admin_path, 'r') as admin_f:
