@@ -1,0 +1,14 @@
+dist: xenial
+language: python
+python:
+  - "3.7"
+script:
+  - python -m pytest
+  - find mobility_pipeline -name "*.py" | xargs pylint
+  - find tests/src -name "*.py" | xargs pylint
+  - python -m mypy mobility_pipeline
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+branches:
+  only:
+    - master
