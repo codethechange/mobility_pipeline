@@ -14,7 +14,7 @@ import numpy as np  # type: ignore
 from shapely.geometry import Polygon  # type: ignore
 
 
-def load_voronoi(voronoi_json: List[List[float]]) -> Polygon:
+def load_cell(voronoi_json: List[List[float]]) -> Polygon:
     """
 
     Loads Voronoi from JSON of the format:
