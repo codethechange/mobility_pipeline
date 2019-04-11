@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """Stores the constants and functions to interface with data files
 
 This file is specific to the data files we are using and their format.
