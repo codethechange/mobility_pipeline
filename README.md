@@ -1,6 +1,7 @@
 # `mobility_pipeline`: Processing Mobility Data
 
 [![Build Status](https://travis-ci.com/codethechange/mobility_pipeline.svg?branch=master)](https://travis-ci.com/codethechange/mobility_pipeline)
+[![codecov](https://codecov.io/gh/codethechange/mobility_pipeline/branch/master/graph/badge.svg)](https://codecov.io/gh/codethechange/mobility_pipeline)
 
 `mobility_pipeline` is a set of tools for processing mobility data. It is in
 the very early stages of development.
