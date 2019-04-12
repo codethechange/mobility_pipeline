@@ -45,7 +45,7 @@ if __name__ == '__main__':
     for cell in cells:
         plot_polygon(ax, cell)
     for lat, lng in towers:
-        ax.plot(lat, lng, color='red', marker='o', markersize=2)
+        ax.plot(lat, lng, color='red', marker='o', markersize=2, alpha=0.5)
 
     # Showed how to auto-resize axes: https://stackoverflow.com/a/11039268
     ax.relim()
