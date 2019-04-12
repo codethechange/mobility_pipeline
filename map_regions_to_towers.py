@@ -11,21 +11,15 @@ in the mapping is printed to check whether the provided cells and seeds appear
 valid.
 """
 
-import json
-import numpy as np
 from shapely.geometry import Point
 from mobility_pipeline.exploratory import map_cells_to_seeds
-from mobility_pipeline.voronoi import load_cell
-from data_interface import TOWERS_PATH, VORONOI_PATH
+from data_interface import load_towers, load_cells
 
 if __name__ == '__main__':
-    with open(VORONOI_PATH, 'r') as f:
-        raw_json = json.loads(f.read())
-    cells = [load_cell(feature['geometry']) for feature in raw_json['features']]
+    cells = load_cells()
 
     # Directed to numpy docs by https://stackoverflow.com/a/3519314
-    towers_mat = np.genfromtxt(TOWERS_PATH, delimiter=',')
-    towers_mat = towers_mat[:, 1:]
+    towers_mat = load_towers()
     mapping = map_cells_to_seeds(cells, [Point(row[0], row[1])
                                          for row in towers_mat])
     print(mapping)
