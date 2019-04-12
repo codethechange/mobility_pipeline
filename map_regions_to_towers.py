@@ -16,9 +16,7 @@ import numpy as np
 from shapely.geometry import Point
 from mobility_pipeline.exploratory import map_cells_to_seeds
 from mobility_pipeline.voronoi import load_cell
-
-TOWERS_PATH = "data/brazil-mobility/towers_br.csv"
-VORONOI_PATH = "data/brazil-mobility/voronoi_br.json"
+from data_interface import TOWERS_PATH, VORONOI_PATH
 
 if __name__ == '__main__':
     with open(VORONOI_PATH, 'r') as f:
