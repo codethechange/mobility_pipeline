@@ -119,6 +119,9 @@ def load_cell(cell_json: VoronoiCell) -> MultiPolygon:
     Returns:
         A polygon of the Voronoi cell
     """
+    # Check for an empty polygon
+    if 'type' not in cell_json:
+        return MultiPolygon([Polygon([[0, 0], [0, 0], [0, 0]])])
     # We typecast because the value of `type` tells us the type of `coordinates`
     if cell_json['type'] == 'Polygon':
         coors = cast(List[List[List[float]]], cell_json['coordinates'])
