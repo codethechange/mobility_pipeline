@@ -11,11 +11,12 @@ in the mapping is printed to check whether the provided cells and seeds appear
 valid. Indices of cells without towers and coordinates are also printed.
 """
 
-from shapely.geometry import Point
+from shapely.geometry import Point  # type: ignore
 from mobility_pipeline.lib.exploratory import map_cells_to_seeds
 from mobility_pipeline.data_interface import load_towers, load_cells
 
 if __name__ == '__main__':
+    # pragma pylint: disable=invalid-name
     cells = load_cells()
 
     # Directed to numpy docs by https://stackoverflow.com/a/3519314

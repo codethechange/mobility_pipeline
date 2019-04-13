@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+"""Script for JSON file inspection to determine if it is shape file or Voronoi
+
+"""
+
 import json
 
 
@@ -7,6 +11,7 @@ COLOMBIA_STATS = 'date/mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
 
 
 if __name__ == '__main__':
+    # pragma pylint: disable=invalid-name
     with open(COLOMBIA_STATS, 'r') as f:
         data = json.loads(f.read())
     features = data['features']

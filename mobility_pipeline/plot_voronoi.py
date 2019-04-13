@@ -8,9 +8,9 @@ of towers and number of cells. Towers without an associated cell are shown in
 green, while other towers are shown in red.
 """
 
-from matplotlib import pyplot as plt
-from shapely.geometry import MultiPolygon
-from descartes import PolygonPatch
+from matplotlib import pyplot as plt  # type: ignore
+from shapely.geometry import MultiPolygon  # type: ignore
+from descartes import PolygonPatch  # type: ignore
 from mobility_pipeline.data_interface import load_cells, load_towers
 
 
@@ -30,6 +30,7 @@ def plot_polygon(axes: plt.axes, polygon: MultiPolygon) -> None:
 
 
 if __name__ == '__main__':
+    # pragma pylint: disable=invalid-name
     cells = load_cells()
     towers = load_towers()
     print('Number of Cells: ', len(cells), 'Number of Towers: ', len(towers))
