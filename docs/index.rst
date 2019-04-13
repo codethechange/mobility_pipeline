@@ -35,7 +35,7 @@ Legal
 -----
 
 This project was created by
-`Stanford Code the Change <http://www.codethechange.stanford.edu>`_ for UNICEF.
+`Stanford Code the Change <http://codethechange.stanford.edu>`_ for UNICEF.
 It is available under the license in
 `LICENSE.txt <https://github.com/codethechange/mobility_pipeline/blob/master/LICENSE.txt>`_
 
