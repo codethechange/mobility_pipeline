@@ -49,8 +49,12 @@ master_doc = 'index'
 # https://gist.github.com/bskinn/0e164963428d4b51017cebdb6cda5209 for
 intersphinx_mapping = {'shapely': ('https://shapely.readthedocs.io/en/latest/',
                                    None),
-                       'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-                       'matplotlib': ('http://matplotlib.org', None)}
+                       'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+                       'matplotlib': ('https://matplotlib.org', None),
+                       'pandas': (
+                           'https://pandas.pydata.org/pandas-docs/stable/',
+                           None)
+                       }
 
 
 # -- Options for HTML output -------------------------------------------------
