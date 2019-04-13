@@ -8,7 +8,7 @@ coordinates are missing or out of order, so counts must be inserted manually.
 """
 
 import csv
-from data_interface import MOBILITY_PATH
+from mobility_pipeline.data_interface import MOBILITY_PATH
 
 
 def check_perfect(mobility: csv):

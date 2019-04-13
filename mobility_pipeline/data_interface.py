@@ -18,6 +18,13 @@ MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 
 
 def load_cells() -> List[MultiPolygon]:
+    """Loads the Voronoi cells from the file at :py:const:`VORONOI_PATH`
+
+    Returns:
+        A list of :py:mod:`shapely.geometry.MultiPolygon` objects, each of which
+        describes a cell. If the cell can be described as a single polygon, the
+        returned MultiPolygon will contain only 1 polygon.
+    """
     with open(VORONOI_PATH, 'r') as f:
         raw_json = json.loads(f.read())
     cells = [load_cell(feature['geometry']) for feature in raw_json['features']]

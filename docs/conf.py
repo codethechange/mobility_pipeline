@@ -29,7 +29,8 @@ author = 'Stanford Code the Change (http://codethechange.stanford.edu)'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -42,6 +43,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the “master” document that contains the root toctree directive
 master_doc = 'index'
+
+# Mappings to external documentation with intersphinx
+# The numpy and matplotlib URLs came from Brian Skinn's gist here:
+# https://gist.github.com/bskinn/0e164963428d4b51017cebdb6cda5209 for
+intersphinx_mapping = {'shapely': ('https://shapely.readthedocs.io/en/latest/',
+                                   None),
+                       'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+                       'matplotlib': ('http://matplotlib.org', None)}
 
 
 # -- Options for HTML output -------------------------------------------------
