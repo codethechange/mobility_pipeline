@@ -12,6 +12,10 @@ Welcome to UNICEF Mobility Pipeline's documentation!
 .. image:: https://codecov.io/gh/codethechange/mobility_pipeline/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/codethechange/mobility_pipeline
 
+.. image:: https://readthedocs.org/projects/unicef-mobility-pipeline/badge/?version=latest
+   :target: https://unicef-mobility-pipeline.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
