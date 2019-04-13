@@ -4,9 +4,8 @@ This file is specific to the data files we are using and their format.
 """
 
 import json
-import re
-import csv
 import numpy as np
+import pandas as pd
 from typing import List
 from shapely.geometry import MultiPolygon
 from mobility_pipeline.voronoi import load_cell
@@ -31,15 +30,9 @@ def load_towers() -> np.ndarray:
     return towers_mat
 
 
-def load_mobility() -> np.ndarray:
-    num_re = re.compile('[0-9]+')
-
-    def get_int(x):
-        return int(num_re.search(x).group(0))
-
-    with open(MOBILITY_PATH, newline='') as f:
-        mobility_csv = csv.reader(f)
-        next(mobility_csv)  # Skip header line of CSV
-        mobility_csv = [[get_int(ori), get_int(dst), count]
-                        for date, ori, dst, count in mobility_csv]
-    return np.array(mobility_csv)
+def load_mobility() -> pd.DataFrame:
+    df = pd.read_csv(MOBILITY_PATH)
+    del df['DATE']
+    df['ORIGIN'] = df['ORIGIN'].str[2:].astype(np.int)
+    df['DESTINATION'] = df['DESTINATION'].str[2:].astype(np.int)
+    return df
