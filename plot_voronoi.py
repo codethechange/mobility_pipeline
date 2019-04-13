@@ -4,16 +4,17 @@
 
 Note that the seeds of the tessellation are based on the provided towers file,
 not computed from the cells. The tool also prints to the console the number
-of towers and number of cells.
+of towers and number of cells. Towers without an associated cell are shown in
+green, while other towers are shown in red.
 """
 
 from matplotlib import pyplot as plt
-from shapely.geometry.polygon import Polygon
+from shapely.geometry import MultiPolygon
 from descartes import PolygonPatch
 from data_interface import load_cells, load_towers
 
 
-def plot_polygon(axes: plt.axes, polygon: Polygon) -> None:
+def plot_polygon(axes: plt.axes, polygon: MultiPolygon) -> None:
     """Add a polygon to an axes
 
     Args:
@@ -42,10 +43,16 @@ if __name__ == '__main__':
     ax = fig.add_axes((0.1, 0.1, 0.9, 0.9))
     ax.set_aspect(1)
 
-    for cell in cells:
+    no_coor_indices = []
+    for i, cell in enumerate(cells):
         plot_polygon(ax, cell)
-    for lat, lng in towers:
-        ax.plot(lat, lng, color='red', marker='o', markersize=2, alpha=0.5)
+        if cell.area == 0:
+            no_coor_indices.append(i)
+    for i, (lat, lng) in enumerate(towers):
+        color = 'red'
+        if i in no_coor_indices:
+            color = 'green'
+        ax.plot(lat, lng, color=color, marker='o', markersize=2, alpha=0.5)
 
     # Showed how to auto-resize axes: https://stackoverflow.com/a/11039268
     ax.relim()
