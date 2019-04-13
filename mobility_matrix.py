@@ -1,39 +1,46 @@
 #!/usr/bin/env python3
 
-import json
+"""Generates the admin-to-admin mobility matrix from data files
+
+Currently only computes the tower-to-tower matrix.
+"""
+
 import numpy as np
-from os import path
-from typing import Dict
+import pandas as pd
+from data_interface import load_mobility, load_towers
 
 
-def make_admin_dict(admin_json: json) -> Dict[str, int]:
-    admins = admin_json['features']
-    admins_dict = {}
-    for i, admin in enumerate(admins):
-        admins_dict[admin['properties']['admin_id']] = i
-    return admins_dict
+def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
+        -> np.ndarray:
+    """Make tower-to-tower mobility matrix
 
+    Thank you to Tomas Bencomo (https://github.com/tjbencomo) for writing the
+    initial version of this function.
 
-def json_to_matrix(pairs: json, admins: Dict[str, int]) -> np.ndarray:
-    # Assume no duplication of admin_id values and no duplicate mobility values
-    n_admins = len(admins)
-    mat = np.zeros((n_admins, n_admins))
-    for pair in pairs:
-        origin_i = admins[pair['id_origin']]
-        destination_i = admins[pair['id_destination']]
-        mat[origin_i][destination_i]: int = pair['people']
-    return mat
+    Args:
+        mobility: DataFrame of mobility data with columns
+            ``[ORIGIN, DESTINATION, COUNT]``.
+        n_towers: Number of towers, which defines the length of each matrix
+            dimension
+
+    Returns:
+        The tower-to-tower matrix, which has shape ``(n_towers, n_towers)`` and
+        where the value at row ``i`` and column ``j`` is the mobility count for
+        origin ``i`` and destination ``j``.
+
+    """
+    ori_indices = np.array([np.repeat(i, n_towers)
+                            for i in np.arange(0, n_towers)]).flatten()
+    dst_indices = np.tile(np.arange(0, n_towers), n_towers)
+    df = pd.DataFrame({'ORIGIN': ori_indices, 'DESTINATION': dst_indices})
+    mobility = pd.merge(df, mobility, how='left', on=['ORIGIN', 'DESTINATION'])
+    mobility = mobility.fillna(0)
+    np_array = mobility['COUNT'].values
+    return np.reshape(np_array, (n_towers, n_towers))
 
 
 if __name__ == '__main__':
-    admin_path = 'data/mpio-hdi-pop-threats-violence-zika-hdi_estimated.json'
-    mobility_path = path.join('data', 'Colombia-base-line-mobility',
-                              'movement-day0.json')
+    mobility_df = load_mobility()
+    towers_mat = load_towers()
 
-    with open(admin_path, 'r') as admin_f:
-        admin_json = json.load(admin_f)
-    with open(mobility_path, 'r') as mobility_f:
-        mobility_json = json.load(mobility_f)
-
-    admin_dict = make_admin_dict(admin_json)
-    matrix = json_to_matrix(mobility_json, admin_dict)
+    tower_tower_mat = make_tower_tower_matrix(mobility_df, len(towers_mat))
