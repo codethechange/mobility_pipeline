@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from typing import List
 from shapely.geometry import MultiPolygon
-from mobility_pipeline.voronoi import load_cell
+from mobility_pipeline.lib.voronoi import load_cell
 
 DATA_PATH = "data/brazil-towers-voronoi-mobility/"
 

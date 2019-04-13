@@ -12,7 +12,7 @@ valid. Indices of cells without towers and coordinates are also printed.
 """
 
 from shapely.geometry import Point
-from mobility_pipeline.exploratory import map_cells_to_seeds
+from lib.exploratory import map_cells_to_seeds
 from data_interface import load_towers, load_cells
 
 if __name__ == '__main__':

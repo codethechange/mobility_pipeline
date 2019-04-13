@@ -2,7 +2,7 @@
 
 import json
 from shapely.geometry import Point
-from mobility_pipeline.voronoi import load_cell
+from mobility_pipeline.lib.voronoi import load_cell
 
 
 def test_load_cell_polygon():
