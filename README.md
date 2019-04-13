@@ -9,6 +9,9 @@ the very early stages of development.
 To get started, see our [getting started guide](GETTING_STARTED.rst). If you'd
 like to contribute, see our [contributing guide](CONTRIBUTING.rst).
 
+For more detailed documentation, see our hosted documentation at
+https://unicef-mobility-pipeline.readthedocs.io/en/latest/
+
 ## Legal
 
 This project was created by
