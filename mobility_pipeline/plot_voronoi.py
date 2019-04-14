@@ -11,7 +11,7 @@ green, while other towers are shown in red.
 from matplotlib import pyplot as plt  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
 from descartes import PolygonPatch  # type: ignore
-from mobility_pipeline.data_interface import load_cells, load_towers
+from data_interface import load_cells, load_towers
 
 
 def plot_polygon(axes: plt.axes, polygon: MultiPolygon) -> None:

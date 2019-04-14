@@ -9,7 +9,7 @@ coordinates are missing or out of order, so counts must be inserted manually.
 
 import csv
 from typing import List
-from mobility_pipeline.data_interface import MOBILITY_PATH
+from data_interface import MOBILITY_PATH
 
 
 def check_perfect(mobility: List[List[str]]) -> None:

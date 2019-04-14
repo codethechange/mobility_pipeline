@@ -8,7 +8,7 @@ from typing import List
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
-from mobility_pipeline.lib.voronoi import load_cell
+from lib.voronoi import load_cell
 
 # Thanks to abarnert at StackOverflow for how to document constants
 # https://stackoverflow.com/a/20227174

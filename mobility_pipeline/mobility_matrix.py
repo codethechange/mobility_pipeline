@@ -7,7 +7,7 @@ Currently only computes the tower-to-tower matrix.
 
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
-from mobility_pipeline.data_interface import load_mobility, load_towers
+from data_interface import load_mobility, load_towers
 
 
 def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
