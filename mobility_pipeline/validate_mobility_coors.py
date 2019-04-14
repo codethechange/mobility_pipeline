@@ -72,14 +72,17 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
     :py:const:`data_interface.TOWER_PREFIX`. The count must be composed entirely
     of digits and represent a non-negative integer.
 
+    The origin and destination tower numeric portions must strictly increase in
+    origin-major order.
+
     Args:
         raw: The text to check
 
     Returns:
         None if the input is valid, a string describing the error otherwise.
     """
-    prev_ori = 0
-    prev_dst = 0
+    prev_ori = -1
+    prev_dst = -1
     for line in raw:
         _, ori_str, dst_str, count_str = line
         ori_str = ori_str[len(TOWER_PREFIX):]
@@ -101,8 +104,8 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
                 format(line, prev_ori)
         if ori > prev_ori:
             prev_ori = ori
-            prev_dst = 0
-        if dst < prev_dst:
+            prev_dst = -1
+        if dst <= prev_dst:
             return "Line {} invalid because previous destination was {}".\
                 format(line, prev_dst)
         prev_dst = dst
