@@ -3,6 +3,7 @@ language: python
 python:
   - "3.7"
 script:
+  - export PYTHONPATH="./mobility_pipeline/:$PYTHONPATH"
   - python -m pytest
   - find mobility_pipeline -name "*.py" | xargs pylint
   - find tests/src -name "*.py" | xargs pylint
