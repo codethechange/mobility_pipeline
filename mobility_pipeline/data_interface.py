@@ -23,6 +23,9 @@ VORONOI_PATH = "%sbrazil-voronoi.json" % DATA_PATH
 MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
 
+TOWER_PREFIX = 'br'
+"""The tower name is the tower index appended to this string"""
+
 
 def load_cells() -> List[MultiPolygon]:
     """Loads the Voronoi cells from the file at :py:const:`VORONOI_PATH`.

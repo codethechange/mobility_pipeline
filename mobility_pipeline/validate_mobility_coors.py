@@ -9,10 +9,7 @@ coordinates are missing or out of order, so counts must be inserted manually.
 
 import csv
 from typing import List, Optional
-from data_interface import MOBILITY_PATH
-
-
-TOWER_PREFIX = 'br'
+from data_interface import MOBILITY_PATH, TOWER_PREFIX
 
 
 def check_perfect(mobility: List[List[str]]) -> None:
