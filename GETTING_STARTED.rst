@@ -23,7 +23,7 @@ Getting the Code and Dependencies
     .. code-block:: console
 
       $ cd name_of_cloned_repository
-      $ pip3 -m venv -p python3 venv
+      $ python3 -m venv venv
       $ source venv/bin/activate
       $ pip install -r requirements.txt
 
