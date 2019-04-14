@@ -68,6 +68,10 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
     4 strings: a date (not checked), an origin tower, a destination tower, and
     a count.
 
+    The origin and destination must be composed of digits following
+    :py:const:`data_interface.TOWER_PREFIX`. The count must be composed entirely
+    of digits and represent a non-negative integer.
+
     Args:
         raw: The text to check
 
