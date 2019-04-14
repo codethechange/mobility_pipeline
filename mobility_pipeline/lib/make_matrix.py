@@ -15,7 +15,7 @@ def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
 
     Args:
         mobility: DataFrame of mobility data with columns
-            ``[ORIGIN, DESTINATION, COUNT]``.
+            ``[ORIGIN, DESTINATION, COUNT]``. All values should be numeric.
         n_towers: Number of towers, which defines the length of each matrix
             dimension
 
