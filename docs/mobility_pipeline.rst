@@ -19,14 +19,6 @@ mobility\_pipeline.data\_interface module
     :undoc-members:
     :show-inheritance:
 
-mobility\_pipeline.inspect\_files module
-----------------------------------------
-
-.. automodule:: mobility_pipeline.inspect_files
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 mobility\_pipeline.map\_regions\_to\_towers module
 --------------------------------------------------
 

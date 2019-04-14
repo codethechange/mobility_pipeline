@@ -12,6 +12,14 @@ mobility\_pipeline.lib.exploratory module
     :undoc-members:
     :show-inheritance:
 
+mobility\_pipeline.lib.make\_matrix module
+------------------------------------------
+
+.. automodule:: mobility_pipeline.lib.make_matrix
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mobility\_pipeline.lib.voronoi module
 -------------------------------------
 
