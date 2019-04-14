@@ -76,7 +76,7 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
     return None
 
 
-def validate_mobility_full(mobility: List[List[str]]) -> None:
+def validate_mobility_full(mobility: List[List[str]]) -> Optional[str]:
     """Check whether the mobility data file is correctly ordered and full
 
     The mobility data file is loaded from the file at path
@@ -94,10 +94,7 @@ def validate_mobility_full(mobility: List[List[str]]) -> None:
         mobility: List of mobility CSV data by applying ``list(csv.reader(f))``
 
     Returns:
-        None
-
-    Raises:
-        Exception: If an invalid ordering is found
+        None if there is no error, otherwise a description of the error.
     """
     n_towers = int(mobility[-1][1][2:]) + 1
     i_row = 0
@@ -110,5 +107,6 @@ def validate_mobility_full(mobility: List[List[str]]) -> None:
                     i_row, mobility[i_row],
                     'date,br{},br{},count'.format(i_ori, i_dst)
                 )
-                raise Exception(msg)
+                return msg
             i_row += 1
+    return None
