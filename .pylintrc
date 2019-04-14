@@ -14,7 +14,10 @@ good-names=i,
            s,
            p1,
            p2,
-           df
+           df,
+           a,
+           b,
+           c
 
 [MESSAGES CONTROL]
 
