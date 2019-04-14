@@ -13,6 +13,7 @@ cycler==0.10.0
 decorator==4.4.0
 descartes==1.1.0
 docutils==0.14
+hypothesis==4.16.0
 idna==2.8
 imagesize==1.1.0
 isort==4.3.16

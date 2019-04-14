@@ -4,6 +4,7 @@
 *.js
 *.pyc
 *__pycache__/
-venv/
+/venv/
 .coverage
-docs/_build
+/docs/_build
+/.hypothesis/
