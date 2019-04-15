@@ -2,7 +2,9 @@
 
 """
 
-from typing import List, Optional
+import csv
+from typing import List, Optional, cast
+from shapely.geometry import MultiPolygon, Point  # type: ignore
 from data_interface import TOWER_PREFIX
 
 
@@ -109,4 +111,48 @@ def validate_mobility_full(mobility: List[List[str]]) -> Optional[str]:
                 )
                 return msg
             i_row += 1
+    return None
+
+
+def validate_tower_cells_aligned(cells: List[MultiPolygon],
+                                 towers: List[Point]) -> Optional[str]:
+    """Check that each tower's index matches the cell at the same index
+
+    For any cell ``c`` at index ``i``, an error is found if ``c`` has nonzero
+    area and the tower at index ``i`` is not within ``c``.
+
+    Args:
+        cells: List of the cells (multi) polygons, in order
+        towers: List of the towers' coordinates, in order
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    for i, cell in enumerate(cells):
+        if cell.area != 0 and not cell.contains(towers[i]):
+            return "Tower at index {} not within cell at same index".format(i)
+    return None
+
+
+def validate_tower_index_name_aligned(csv_reader: csv.DictReader)\
+        -> Optional[str]:
+    """Check that in the towers data file, the tower names match their indices
+
+    Indices are zero-indexed from the second row in the file (to skip the
+    header). An error is considered found if any tower name is not exactly
+    :py:const:`TOWER_PREFIX` appended with the tower's index.
+
+    Args:
+        csv_reader: CSV reader from calling ``csv.reader(f)`` on the open data
+            file ``f``
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    next(csv_reader)  # read past header
+    for i, row in enumerate(csv_reader):
+        lst = cast(List[str], row)  # TODO: Why is this needed?
+        if lst[0] != TOWER_PREFIX + str(i):
+            return 'Tower {} invalid because should have name {}{}'.\
+                format(lst, TOWER_PREFIX, i)
     return None
