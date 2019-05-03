@@ -4,6 +4,7 @@ This file is specific to the data files we are using and their format.
 """
 
 import json
+import shapefile
 from typing import List
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
@@ -22,9 +23,30 @@ VORONOI_PATH = "%sbrazil-voronoi.json" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to Voronoi JSON file"""
 MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
+ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
 
 TOWER_PREFIX = 'br'
 """The tower name is the tower index appended to this string"""
+
+def load_polygons_from_json(filepath) -> List[MultiPolygon]:
+    """Loads cells from given filepath to JSON.
+
+    Returns:
+        A list of :py:mod:`shapely.geometry.MultiPolygon` objects, each of which
+        describes a cell. If the cell can be described as a single polygon, the
+        returned MultiPolygon will contain only 1 polygon.
+    """
+    with open(filepath, 'r') as f:
+        raw_json = json.loads(f.read())
+    cells = [load_cell(feature['geometry']) for feature in raw_json['features']]
+    return cells
+
+def load_admin_cells() -> List[MultiPolygon]:
+    return load_polygons_from_json(ADMIN_PATH)
+
+def load_tower_cells() -> List[MultiPolygon]:
+    return load_polygons_from_json(TOWERS_PATH)
+
 
 
 def load_cells() -> List[MultiPolygon]:
@@ -52,7 +74,6 @@ def load_towers() -> np.ndarray:
     towers_mat = np.genfromtxt(TOWERS_PATH, delimiter=',')
     towers_mat = towers_mat[1:, 1:]
     return towers_mat
-
 
 def load_mobility() -> pd.DataFrame:
     """Loads mobility data from the file at :py:const:`MOBILITY_PATH`.
