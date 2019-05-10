@@ -3,7 +3,7 @@
 
 import numpy as np
 from shapely.geometry.polygon import Polygon  # type: ignore
-from lib.overlap import computeOverlap
+from lib.overlap import compute_overlap
 
 
 def test_compute_overlap_simple():
@@ -13,4 +13,4 @@ def test_compute_overlap_simple():
     polygons = [polygon1, polygon2, polygon3]
     enclosing = Polygon([(-2, -3), (-2, 3), (2, 3), (2, -3)])
 
-    assert np.all(computeOverlap(enclosing, polygons) == [1, 0.5, 0.5])
+    assert np.all(compute_overlap(enclosing, polygons) == [1, 0.5, 0.5])
