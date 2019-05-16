@@ -5,7 +5,8 @@ from hypothesis import given
 from hypothesis.strategies import lists, integers
 import numpy as np
 import pandas as pd
-from mobility_pipeline.lib.make_matrix import make_tower_tower_matrix
+from mobility_pipeline.lib.make_matrix import make_tower_tower_matrix, \
+    make_admin_admin_matrix
 
 
 PANDAS_COLUMNS = ['ORIGIN', 'DESTINATION', 'COUNT']
@@ -53,3 +54,17 @@ def test_make_tower_tower_matrix_hypothesis(nums, num):
     expected_mat = np.reshape(np.array(nums), (n_towers, n_towers))
 
     assert np.all(mat == expected_mat)
+
+
+def test_make_matrix_simple():
+    a = np.array([[1, 2],
+                  [3, 4]])
+    b = np.array([[2, 3],
+                  [4, 1]])
+    c = np.array([[0, 1],
+                  [5, 2]])
+    e = np.array([[25, 20],
+                  [65, 48]])
+
+    assert np.all(make_admin_admin_matrix(b, a, c) == (a @ b) @ c)
+    assert np.all((a @ b) @ c == e)
