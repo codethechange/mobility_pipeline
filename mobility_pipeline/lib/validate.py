@@ -220,3 +220,28 @@ def validate_admins() -> Optional[str]:
     if error:
         return f'Invalid admin cells: {error}'
     return None
+
+
+def validate_voronoi() -> Optional[str]:
+    """Check that the Voronoi cells are reasonable
+
+    Checks:
+
+    * That the cells can be loaded by :py:mod:`load_cells`.
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal.
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    try:
+        cells = load_cells()
+    except Exception as e:
+        msg = repr(e)
+        return f'Loading Voronoi cells failed with error: {msg}'
+    error = validate_contiguous_disjoint_cells(cells)
+    if error:
+        return f'Invalid Voronoi cells: {error}'
+    return None
