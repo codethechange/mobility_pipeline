@@ -13,7 +13,7 @@ from lib.voronoi import load_cell
 # Thanks to abarnert at StackOverflow for how to document constants
 # https://stackoverflow.com/a/20227174
 
-DATA_PATH = "data/brazil-towers-voronoi-mobility/"
+DATA_PATH = "../data/brazil-towers-voronoi-mobility/"
 """Path to folder containing towers, voronoi, and mobility data"""
 
 TOWERS_PATH = "%stowers_br.csv" % DATA_PATH
