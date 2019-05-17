@@ -20,6 +20,22 @@ mobility\_pipeline.lib.make\_matrix module
     :undoc-members:
     :show-inheritance:
 
+mobility\_pipeline.lib.overlap module
+-------------------------------------
+
+.. automodule:: mobility_pipeline.lib.overlap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mobility\_pipeline.lib.validate module
+--------------------------------------
+
+.. automodule:: mobility_pipeline.lib.validate
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mobility\_pipeline.lib.voronoi module
 -------------------------------------
 

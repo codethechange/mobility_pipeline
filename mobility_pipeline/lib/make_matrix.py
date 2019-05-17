@@ -1,32 +1,33 @@
 """Functions for making tower-tower, tower-admin, and admin-tower matrices
 
 Matrices:
+
 * tower-tower: The raw mobility data between cell towers. The value at row ``i``
-    and column ``j`` is the number of people who move on that day from the
-    region served by tower ``i`` to the region served by tower ``j``. Note that
-    really, this is the number of cell phones that connect to tower ``i`` in the
-    morning and tower ``j`` in the evening, which we assume represents a person
-    moving. This matrix has row indices of the origin towers and column indices
-    of the destination towers.
+  and column ``j`` is the number of people who move on that day from the
+  region served by tower ``i`` to the region served by tower ``j``. Note that
+  really, this is the number of cell phones that connect to tower ``i`` in the
+  morning and tower ``j`` in the evening, which we assume represents a person
+  moving. This matrix has row indices of the origin towers and column indices
+  of the destination towers.
 * tower-admin: Computed from the Voronoi tessellation and the country shapefile,
-    this matrix represents the percent of each admin that is covered by each
-    tower. For any ``x`` in the matrix at row ``i`` and column ``j``, we know
-    that a fraction ``x`` of the admin with index ``i`` is covered by the tower
-    with index ``j``. This means that the matrix has row indices of admin
-    indices and column indices of tower indices.
+  this matrix represents the percent of each admin that is covered by each
+  tower. For any ``x`` in the matrix at row ``i`` and column ``j``, we know
+  that a fraction ``x`` of the admin with index ``i`` is covered by the tower
+  with index ``j``. This means that the matrix has row indices of admin
+  indices and column indices of tower indices.
 * admin-tower: Computed from the Voronoi tessellation and the country shapefile,
-    this matrix represents the percent of each tower's range that is within each
-    admin. For any ``x`` in the matrix at row ``i`` and column ``j``, we know
-    that a fraction ``x`` of the Voronoi cell for the tower with index ``i`` is
-    within the admin
-    with index ``j``. This means that the matrix has row indices of tower
-    indices and column indices of admin indices.
+  this matrix represents the percent of each tower's range that is within each
+  admin. For any ``x`` in the matrix at row ``i`` and column ``j``, we know
+  that a fraction ``x`` of the Voronoi cell for the tower with index ``i`` is
+  within the admin
+  with index ``j``. This means that the matrix has row indices of tower
+  indices and column indices of admin indices.
 * admin-admin: This is the final mobility matrix, which represents the number
-    of people who move between admins each day. The value at row ``i`` and
-    column ``j`` is the number of people who move on that day from the admin
-    with index ``i`` to the admin with index ``j``. This is, of course, being
-    estimated from cell phone data and the overlaps as computed in the other
-    matrices.
+  of people who move between admins each day. The value at row ``i`` and
+  column ``j`` is the number of people who move on that day from the admin
+  with index ``i`` to the admin with index ``j``. This is, of course, being
+  estimated from cell phone data and the overlaps as computed in the other
+  matrices.
 
 This strategy is explained by Mike Fabrikant at UNICEF:
 https://medium.com/@mikefabrikant/cell-towers-chiefdoms-and-anonymized-call-detail-records-a-guide-to-creating-a-mobility-matrix-d2d5c1bafb68
