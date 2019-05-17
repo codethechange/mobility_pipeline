@@ -3,9 +3,14 @@
 """
 
 import csv
-from typing import List, Optional, cast
-from shapely.geometry import MultiPolygon, Point  # type: ignore
-from data_interface import TOWER_PREFIX
+import numpy as np
+from typing import List, Optional, cast, Union
+from shapely.geometry import MultiPolygon, Polygon, Point  # type: ignore
+from shapely.ops import unary_union  # type: ignore
+from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
+
+
+AREA_THRESHOLD = 0.0000000001
 
 
 def all_numeric(string: str) -> bool:
@@ -115,7 +120,7 @@ def validate_mobility_full(mobility: List[List[str]]) -> Optional[str]:
 
 
 def validate_tower_cells_aligned(cells: List[MultiPolygon],
-                                 towers: List[Point]) -> Optional[str]:
+                                 towers: np.ndarray) -> Optional[str]:
     """Check that each tower's index matches the cell at the same index
 
     For any cell ``c`` at index ``i``, an error is found if ``c`` has nonzero
@@ -123,13 +128,14 @@ def validate_tower_cells_aligned(cells: List[MultiPolygon],
 
     Args:
         cells: List of the cells (multi) polygons, in order
-        towers: List of the towers' coordinates, in order
+        towers: List of the towers' coordinates (latitude, longitude), in order
 
     Returns:
         A description of a found error, or ``None`` if no error found.
     """
     for i, cell in enumerate(cells):
-        if cell.area != 0 and not cell.contains(towers[i]):
+        tower = Point(*towers[i])
+        if cell.area != 0 and not cell.contains(tower):
             return "Tower at index {} not within cell at same index".format(i)
     return None
 
