@@ -44,7 +44,7 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
     origin-major order.
 
     Args:
-        raw: The text to check
+        raw: List of mobility CSV data by applying ``list(csv.reader(f))``
 
     Returns:
         None if the input is valid, a string describing the error otherwise.
