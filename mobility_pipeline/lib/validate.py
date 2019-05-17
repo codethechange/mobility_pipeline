@@ -193,3 +193,30 @@ def validate_contiguous_disjoint_cells(
     if diff < - AREA_THRESHOLD:
         return f'Cells not disjoint: areas sum {areas} > union area {t_area}'
     return None
+
+
+def validate_admins() -> Optional[str]:
+    """Check that the admins defined in the shapefile are reasonable
+
+    Checks:
+
+    * That the cells can be loaded by :py:mod:`load_admin_cells`.
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal.
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+
+    try:
+        admins = load_admin_cells()
+    except Exception as e:
+        msg = repr(e)
+        return f'Loading admins failed with error: {msg}'
+
+    error = validate_contiguous_disjoint_cells(admins)
+    if error:
+        return f'Invalid admin cells: {error}'
+    return None
