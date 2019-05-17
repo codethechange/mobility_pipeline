@@ -162,3 +162,34 @@ def validate_tower_index_name_aligned(csv_reader: csv.DictReader)\
             return 'Tower {} invalid because should have name {}{}'.\
                 format(lst, TOWER_PREFIX, i)
     return None
+
+
+def validate_contiguous_disjoint_cells(
+        cells: List[Union[MultiPolygon, Polygon]]):
+    """Check that cells are contiguous and disjoint and that they exist
+
+    Checks:
+
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal.
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+
+    if len(cells) == 0:
+        return 'No cells loaded (length of admins list is 0)'
+
+    areas = 0
+    for mpol in cells:
+        areas += mpol.area
+    total = unary_union(cells)
+    t_area = total.area
+    diff = t_area - areas
+    if diff > AREA_THRESHOLD:
+        return f'Cells not contiguous: areas sum {areas} < union area {t_area}'
+    if diff < - AREA_THRESHOLD:
+        return f'Cells not disjoint: areas sum {areas} > union area {t_area}'
+    return None
