@@ -2,11 +2,10 @@
 
 """
 
-import csv
-import numpy as np
-from typing import List, Optional, cast, Union
+from typing import List, Optional, cast, Union, Iterator
 from shapely.geometry import MultiPolygon, Polygon, Point  # type: ignore
 from shapely.ops import unary_union  # type: ignore
+import numpy as np  # type: ignore
 from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
 
 
@@ -140,7 +139,7 @@ def validate_tower_cells_aligned(cells: List[MultiPolygon],
     return None
 
 
-def validate_tower_index_name_aligned(csv_reader: csv.DictReader)\
+def validate_tower_index_name_aligned(csv_reader: Iterator)\
         -> Optional[str]:
     """Check that in the towers data file, the tower names match their indices
 
@@ -179,8 +178,8 @@ def validate_contiguous_disjoint_cells(
         A description of a found error, or ``None`` if no error found.
     """
 
-    if len(cells) == 0:
-        return 'No cells loaded (length of admins list is 0)'
+    if not cells:
+        return 'No cells loaded (admins list empty)'
 
     areas = 0
     for mpol in cells:
@@ -212,7 +211,7 @@ def validate_admins() -> Optional[str]:
 
     try:
         admins = load_admin_cells()
-    except Exception as e:
+    except (FileNotFoundError, IOError) as e:
         msg = repr(e)
         return f'Loading admins failed with error: {msg}'
 
@@ -238,7 +237,7 @@ def validate_voronoi() -> Optional[str]:
     """
     try:
         cells = load_cells()
-    except Exception as e:
+    except (FileNotFoundError, IOError) as e:
         msg = repr(e)
         return f'Loading Voronoi cells failed with error: {msg}'
     error = validate_contiguous_disjoint_cells(cells)

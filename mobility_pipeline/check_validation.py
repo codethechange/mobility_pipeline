@@ -10,6 +10,8 @@ from mobility_pipeline.lib.validate import validate_mobility, \
 
 
 def validate_data_files() -> bool:
+    # pylint: disable=too-many-return-statements
+    # pylint: disable=too-many-branches
     """Check the validity of data files
 
     Data files validated:
@@ -22,6 +24,7 @@ def validate_data_files() -> bool:
     Returns:
         ``True`` if all files are valid, ``False`` otherwise.
     """
+
     # Load and validate towers
     f = None
     try:
@@ -37,8 +40,7 @@ def validate_data_files() -> bool:
         if align_error:
             print(f'INVALID tower index alignment: {align_error}')
             return False
-        else:
-            print('SUCCESS: Tower indices aligned')
+        print('SUCCESS: Tower indices aligned')
         towers = load_towers()
     finally:
         if f:
@@ -49,8 +51,7 @@ def validate_data_files() -> bool:
     if voronoi_errs:
         print(f'INVALID Voronoi: {voronoi_errs}')
         return False
-    else:
-        print('SUCCESS: Voronoi valid')
+    print('SUCCESS: Voronoi valid')
     voronoi = load_cells()
 
     # Check towers and Voronoi aligned
@@ -58,8 +59,7 @@ def validate_data_files() -> bool:
     if tower_voronoi_align_err:
         print(f'INVALID tower-Voronoi alignment: {tower_voronoi_align_err}')
         return False
-    else:
-        print('SUCCESS: Tower and Voronoi indices aligned')
+    print('SUCCESS: Tower and Voronoi indices aligned')
 
     # Validate mobility data
     try:
@@ -75,8 +75,7 @@ def validate_data_files() -> bool:
         if mobility_err:
             print(f'INVALID mobility data: {mobility_err}')
             return False
-        else:
-            print('SUCCESS: Mobility data valid')
+        print('SUCCESS: Mobility data valid')
     finally:
         if f:
             f.close()
