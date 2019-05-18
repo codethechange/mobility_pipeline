@@ -10,13 +10,11 @@ from mypy_extensions import TypedDict
 import numpy as np  # type: ignore
 from shapely.geometry import Polygon, MultiPolygon 
 from shapely.strtree import STRtree
+from overlap import compute_overlap
+# from rtree import index
 
 
 from matplotlib import pyplot as plt # FOR TESTING PURPOSES
-
-
-ADMIN_PATH = "%sbr_admin2.json"
-
 
 def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
         -> np.ndarray:
@@ -47,29 +45,33 @@ def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
     return np.reshape(np_array, (n_towers, n_towers))
 
 def generate_rtree(polygons):
-    return STRtree(polygons)
+    tree = STRtree(polygons)
+    index_mapping = {}
+    for i, mpoly in enumerate(polygons):
+        index_mapping[tuple([tuple(p.exterior.coords) for p in mpoly])] = i
+    return (tree, index_mapping)
+    # rtree_idx = index.Index()
+    # for i, polygon in enumerate(polygons):
+    #     left, top, right, bottom = polygon.bounds
+    #     rtree_idx.insert(i, (left, bottom, right, top))
+    # return rtree_idx
+        
 
-def make_tower_admin_matrix() -> np.ndarray:
-    admin_cells = load_polygons_from_json(ADMIN_PATH)
-    # admin_rtree = generate_rtree(admin_cells)
-    tower_cells = load_polygons_from_json(TOWER_PATH)
-    tower_rtree = generate_rtree(tower_cells)
-    # overlap = admin_rtree.query(tower_cells[index])
-    overlap = tower_rtree.query(admin_cells[index])
-    plt.ioff()
 
-    fig = plt.figure()
-    # (left, bottom, width, height) in units of fractions of figure dimensions
-    ax = fig.add_axes((0.1, 0.1, 0.9, 0.9))
-    ax.set_aspect(1)
-    for a in tower_cells:
-        plot_polygon(ax, a, [0.5, 0, 0])
-    for p in overlap:
-        plot_polygon(ax, p, [0, 0.5, 0])
-    plot_polygon(ax, admin_cells[index], [0, 0, 0.5])
-    ax.relim()
-    ax.autoscale_view()
+def make_tower_admin_matrix(admin_cells, tower_cells) -> np.ndarray:
+    #make zeroed matrix
+    mat = np.zeros(len(admin_cells), len(tower_cells))
+    #generate tree and mapping
+    admin_rtree, tree_index_mapping = generate_rtree(admin_cells)
+    for i, tower in enumerate(tower_cells):
+        #find overlapping polys using opposing rtree
+        overlapping_cells = admin_rtree.query(tower)
+        for admin in overlap:
+            #compute true overlap and update corresponding entry in matrix
+            coords = tuple([tuple(admin.exterior.coords)])
+            mat[tree_index_mapping[coords]][i] = compute_overlap(tower, admin)
+    return mat
 
-    plt.show()
+
 
 

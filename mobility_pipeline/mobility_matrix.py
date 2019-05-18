@@ -18,31 +18,40 @@ def plot_polygon(axes: plt.axes, polygon: MultiPolygon, color) -> None:
     patch = PolygonPatch(polygon, facecolor=color, edgecolor=[0, 0, 0], alpha=0.3)
     axes.add_patch(patch)
 
-if __name__ == '__main__':
-    # pragma pylint: disable=invalid-name
-    # mobility_df = load_mobility()
-    # towers_mat = load_towers()
-
-    # tower_tower_mat = make_tower_tower_matrix(mobility_df, len(towers_mat))
-    index = 50
+def test_overlap():
+    index = 25
     admin_cells = load_polygons_from_json(ADMIN_PATH)
-    # admin_rtree = generate_rtree(admin_cells)
+    admin_rtree, tree_index_mapping = generate_rtree(admin_cells)
     tower_cells = load_polygons_from_json(TOWER_PATH)
-    tower_rtree = generate_rtree(tower_cells)
-    # overlap = admin_rtree.query(tower_cells[index])
-    overlap = tower_rtree.query(admin_cells[index])
+    tower_rtree, tree_index_mapping = generate_rtree(tower_cells)
+    overlap = admin_rtree.query(tower_cells[index])
+    # left, top, right, bottom = admin_cells[index].bounds
+
+    # overlap = list(tower_rtree.intersection((left, bottom, right, top)))
     plt.ioff()
 
     fig = plt.figure()
     # (left, bottom, width, height) in units of fractions of figure dimensions
     ax = fig.add_axes((0.1, 0.1, 0.9, 0.9))
     ax.set_aspect(1)
-    for a in tower_cells:
+    for a in admin_cells:
         plot_polygon(ax, a, [0.5, 0, 0])
     for p in overlap:
         plot_polygon(ax, p, [0, 0.5, 0])
-    plot_polygon(ax, admin_cells[index], [0, 0, 0.5])
+    plot_polygon(ax, tower_cells[index], [0, 0, 0.5])
     ax.relim()
     ax.autoscale_view()
 
     plt.show()
+
+if __name__ == '__main__':
+    # pragma pylint: disable=invalid-name
+    # mobility_df = load_mobility()
+    # towers_mat = load_towers()
+
+    # tower_tower_mat = make_tower_tower_matrix(mobility_df, len(towers_mat))
+    
+    test_overlap()
+    
+    
+
