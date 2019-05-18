@@ -66,11 +66,12 @@ def make_tower_admin_matrix(admin_cells, tower_cells) -> np.ndarray:
     for i, tower in enumerate(tower_cells):
         #find overlapping polys using opposing rtree
         overlapping_cells = admin_rtree.query(tower)
-        for admin in overlap:
+        for admin in overlapping_cells:
             #compute true overlap and update corresponding entry in matrix
             coords = tuple([tuple(admin.exterior.coords)])
             mat[tree_index_mapping[coords]][i] = compute_overlap(tower, admin)
     return mat
+
 
 
 
