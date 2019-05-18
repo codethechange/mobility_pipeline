@@ -10,6 +10,10 @@ from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
 
 
 AREA_THRESHOLD = 0.0000000001
+"""Allowable deviance between the area of the union of polygons and the sum of
+the polygons' individual areas. Agreement between these values indicates the
+polygons are disjoint and contiguous. Threshold was chosen based on the
+deviances in known good Voronoi tessellations."""
 
 
 def all_numeric(string: str) -> bool:
