@@ -4,7 +4,7 @@
 import csv
 from mobility_pipeline.data_interface import TOWERS_PATH, MOBILITY_PATH, \
     load_cells, load_towers
-from mobility_pipeline.lib.validate import validate_mobility, \
+from mobility_pipeline.lib.validate import validate_mobility, validate_admins, \
     validate_voronoi, validate_tower_cells_aligned, \
     validate_tower_index_name_aligned
 
@@ -13,6 +13,10 @@ def validate_data_files() -> bool:
     # pylint: disable=too-many-return-statements
     # pylint: disable=too-many-branches
     """Check the validity of data files
+
+    Note that these checks are computationally intensive, so they probably
+    should not be included in an automated pipeline. Rather, they are for manual
+    use.
 
     Data files validated:
 
@@ -79,6 +83,13 @@ def validate_data_files() -> bool:
     finally:
         if f:
             f.close()
+
+    # Validate Admins
+    admin_errs = validate_admins()
+    if admin_errs:
+        print(f'INVALID Admins: {admin_errs}')
+        return False
+    print('SUCCESS: Admins valid')
     return True
 
 
