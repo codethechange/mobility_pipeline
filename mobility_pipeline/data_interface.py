@@ -31,6 +31,7 @@ TOWER_PREFIX = 'br'
 
 def load_polygons_from_json(filepath) -> List[MultiPolygon]:
     """Loads cells from given filepath to JSON.
+
     Returns:
         A list of :py:mod:`shapely.geometry.MultiPolygon` objects, each of which
         describes a cell. If the cell can be described as a single polygon, the
