@@ -9,8 +9,9 @@ import numpy as np  # type: ignore
 from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
 
 
-AREA_THRESHOLD = 0.0000000001
-"""Allowable deviance between the area of the union of polygons and the sum of
+AREA_THRESHOLD = 0.0001
+"""Allowable deviance, as a fraction of the area of the union,
+between the area of the union of polygons and the sum of
 the polygons' individual areas. Agreement between these values indicates the
 polygons are disjoint and contiguous. Threshold was chosen based on the
 deviances in known good Voronoi tessellations."""
@@ -175,7 +176,8 @@ def validate_contiguous_disjoint_cells(
 
     * That the cells are contiguous and disjoint. This is checked by comparing
       the sum of areas of each polygon and the area of their union. These two
-      should be equal.
+      should be equal. The allowable deviation is specified by
+      :py:const:`AREA_THRESHOLD`
     * That at least one cell is loaded.
 
     Returns:
@@ -185,16 +187,19 @@ def validate_contiguous_disjoint_cells(
     if not cells:
         return 'No cells loaded (admins list empty)'
 
-    areas = 0
+    area_sum = 0
     for mpol in cells:
-        areas += mpol.area
-    total = unary_union(cells)
-    t_area = total.area
-    diff = t_area - areas
-    if diff > AREA_THRESHOLD:
-        return f'Cells not contiguous: areas sum {areas} < union area {t_area}'
-    if diff < - AREA_THRESHOLD:
-        return f'Cells not disjoint: areas sum {areas} > union area {t_area}'
+        area_sum += mpol.area
+    cell_union = unary_union(cells)
+    union_area = cell_union.area
+    diff = union_area - area_sum
+    frac = diff / union_area
+    if frac > AREA_THRESHOLD:
+        return f'Cells not contiguous: ' \
+            f'sum of areas {area_sum} < area of union {union_area}'
+    if frac < - AREA_THRESHOLD:
+        return f'Cells not disjoint: ' \
+            f'sum of areas {area_sum} > area of union {union_area}'
     return None
 
 
