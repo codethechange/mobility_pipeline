@@ -2,8 +2,19 @@
 
 """
 
-from typing import List, Optional
-from data_interface import TOWER_PREFIX
+from typing import List, Optional, cast, Union, Iterator
+from shapely.geometry import MultiPolygon, Polygon, Point  # type: ignore
+from shapely.ops import unary_union  # type: ignore
+import numpy as np  # type: ignore
+from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
+
+
+AREA_THRESHOLD = 0.0001
+"""Allowable deviance, as a fraction of the area of the union,
+between the area of the union of polygons and the sum of
+the polygons' individual areas. Agreement between these values indicates the
+polygons are disjoint and contiguous. Threshold was chosen based on the
+deviances in known good Voronoi tessellations."""
 
 
 def all_numeric(string: str) -> bool:
@@ -37,7 +48,7 @@ def validate_mobility(raw: List[List[str]]) -> Optional[str]:
     origin-major order.
 
     Args:
-        raw: The text to check
+        raw: List of mobility CSV data by applying ``list(csv.reader(f))``
 
     Returns:
         None if the input is valid, a string describing the error otherwise.
@@ -109,4 +120,136 @@ def validate_mobility_full(mobility: List[List[str]]) -> Optional[str]:
                 )
                 return msg
             i_row += 1
+    return None
+
+
+def validate_tower_cells_aligned(cells: List[MultiPolygon],
+                                 towers: np.ndarray) -> Optional[str]:
+    """Check that each tower's index matches the cell at the same index
+
+    For any cell ``c`` at index ``i``, an error is found if ``c`` has nonzero
+    area and the tower at index ``i`` is not within ``c``.
+
+    Args:
+        cells: List of the cells (multi) polygons, in order
+        towers: List of the towers' coordinates (latitude, longitude), in order
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    for i, cell in enumerate(cells):
+        tower = Point(*towers[i])
+        if cell.area != 0 and not cell.contains(tower):
+            return "Tower at index {} not within cell at same index".format(i)
+    return None
+
+
+def validate_tower_index_name_aligned(csv_reader: Iterator)\
+        -> Optional[str]:
+    """Check that in the towers data file, the tower names match their indices
+
+    Indices are zero-indexed from the second row in the file (to skip the
+    header). An error is considered found if any tower name is not exactly
+    :py:const:`TOWER_PREFIX` appended with the tower's index.
+
+    Args:
+        csv_reader: CSV reader from calling ``csv.reader(f)`` on the open data
+            file ``f``
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    next(csv_reader)  # read past header
+    for i, row in enumerate(csv_reader):
+        lst = cast(List[str], row)  # TODO: Why is this needed?
+        if lst[0] != TOWER_PREFIX + str(i):
+            return 'Tower {} invalid because should have name {}{}'.\
+                format(lst, TOWER_PREFIX, i)
+    return None
+
+
+def validate_contiguous_disjoint_cells(
+        cells: List[Union[MultiPolygon, Polygon]]):
+    """Check that cells are contiguous and disjoint and that they exist
+
+    Checks:
+
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal. The allowable deviation is specified by
+      :py:const:`AREA_THRESHOLD`
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+
+    if not cells:
+        return 'No cells loaded (admins list empty)'
+
+    area_sum = 0
+    for mpol in cells:
+        area_sum += mpol.area
+    cell_union = unary_union(cells)
+    union_area = cell_union.area
+    diff = union_area - area_sum
+    frac = diff / union_area
+    if frac > AREA_THRESHOLD:
+        return f'Cells not contiguous: ' \
+            f'sum of areas {area_sum} < area of union {union_area}'
+    if frac < - AREA_THRESHOLD:
+        return f'Cells not disjoint: ' \
+            f'sum of areas {area_sum} > area of union {union_area}'
+    return None
+
+
+def validate_admins() -> Optional[str]:
+    """Check that the admins defined in the shapefile are reasonable
+
+    Checks:
+
+    * That the cells can be loaded by :py:mod:`load_admin_cells`.
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal.
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+
+    try:
+        admins = load_admin_cells()
+    except (FileNotFoundError, IOError) as e:
+        msg = repr(e)
+        return f'Loading admins failed with error: {msg}'
+
+    error = validate_contiguous_disjoint_cells(admins)
+    if error:
+        return f'Invalid admin cells: {error}'
+    return None
+
+
+def validate_voronoi() -> Optional[str]:
+    """Check that the Voronoi cells are reasonable
+
+    Checks:
+
+    * That the cells can be loaded by :py:mod:`load_cells`.
+    * That the cells are contiguous and disjoint. This is checked by comparing
+      the sum of areas of each polygon and the area of their union. These two
+      should be equal.
+    * That at least one cell is loaded.
+
+    Returns:
+        A description of a found error, or ``None`` if no error found.
+    """
+    try:
+        cells = load_cells()
+    except (FileNotFoundError, IOError) as e:
+        msg = repr(e)
+        return f'Loading Voronoi cells failed with error: {msg}'
+    error = validate_contiguous_disjoint_cells(cells)
+    if error:
+        return f'Invalid Voronoi cells: {error}'
     return None
