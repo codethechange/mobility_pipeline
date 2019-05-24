@@ -4,7 +4,6 @@ This file is specific to the data files we are using and their format.
 """
 
 import json
-import shapefile
 from typing import List
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
