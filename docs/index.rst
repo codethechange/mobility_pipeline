@@ -31,6 +31,33 @@ If you would like to contribute, see our
 This project is hosted on GitHub at
 https://github.com/codethechange/mobility_pipeline
 
+Program Overview
+--------
+Using the administrative region coverage of cell towers in Brazil as a guiding metric,
+this program aims to model the migratory movement of humans from one cell tower region
+to another.
+
+Code Layout and Organization
+------
+The program is decomposed such that separate functions handle the following tasks:
+- Mapping from the Voronoi seeds (the cell towers) to their corresponding cells (locations)
+- Constructing the admin-to-admin mobility matrix
+- Visualizing the data
+
+Technical Paradigm
+------
+
+
+Datasets: Brazil Administrative Areas
+------
+The Brazil .shp file was downloaded via GADM (Database of Global Administrative Areas)
+at the following URL: https://gadm.org/download_country_v3.html
+
+The .shp file was converted to GeoJSON via the command line ogr2ogr tool. The first step
+was to install GDAL. Then, we ran the following line:
+
+ogr2ogr -f GeoJSON -t_srs crs:84 [name].geojson [name].shp
+
 Legal
 -----
 
