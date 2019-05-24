@@ -41,8 +41,9 @@ from mypy_extensions import TypedDict
 import numpy as np  # type: ignore
 from shapely.geometry import Polygon, MultiPolygon 
 from shapely.strtree import STRtree
-from overlap import compute_overlap
+from lib.overlap import compute_overlap
 # from rtree import index
+from collections.abc import Sequence
 
 
 from matplotlib import pyplot as plt # FOR TESTING PURPOSES
@@ -75,40 +76,35 @@ def make_tower_tower_matrix(mobility: pd.DataFrame, n_towers: int) \
     np_array = mobility['COUNT'].values
     return np.reshape(np_array, (n_towers, n_towers))
 
-<<<<<<< HEAD
-def generate_rtree(polygons):
+#Constructs Rtree from polygons, dict from polygon to index in original sequence
+def generate_rtree(polygons: Sequence):
     tree = STRtree(polygons)
     index_mapping = {}
     for i, mpoly in enumerate(polygons):
         index_mapping[tuple([tuple(p.exterior.coords) for p in mpoly])] = i
     return (tree, index_mapping)
-    # rtree_idx = index.Index()
-    # for i, polygon in enumerate(polygons):
-    #     left, top, right, bottom = polygon.bounds
-    #     rtree_idx.insert(i, (left, bottom, right, top))
-    # return rtree_idx
         
 
-
-def make_tower_admin_matrix(admin_cells, tower_cells) -> np.ndarray:
+#makes a matrix from first input to second input
+def make_a_to_b_matrix(a_cells: Sequence, b_cells: Sequence) -> np.ndarray:
     #make zeroed matrix
-    mat = np.zeros(len(admin_cells), len(tower_cells))
+    mat = np.zeros((len(a_cells), len(b_cells)))
     #generate tree and mapping
-    admin_rtree, tree_index_mapping = generate_rtree(admin_cells)
-    for i, tower in enumerate(tower_cells):
-        #find overlapping polys using opposing rtree
-        overlapping_cells = admin_rtree.query(tower)
-        for admin in overlapping_cells:
+    a_rtree, tree_index_mapping = generate_rtree(a_cells)
+    for i, bcell in enumerate(b_cells):
+        #find potential overlapping polys using opposing rtree
+        overlapping_cells = a_rtree.query(bcell)
+        for acell in overlapping_cells:
             #compute true overlap and update corresponding entry in matrix
-            coords = tuple([tuple(admin.exterior.coords)])
-            mat[tree_index_mapping[coords]][i] = compute_overlap(tower, admin)
+            coords = tuple([tuple(pol.exterior.coords) for pol in acell])
+            mat[tree_index_mapping[coords]][i] = compute_overlap(bcell, acell)
     return mat
 
+def make_tower_to_admin_matrix(admin_cells: Sequence, tower_cells: Sequence) -> np.ndarray:
+    return make_a_to_b_matrix(tower_cells, admin_cells)
 
-
-
-
-=======
+def make_admin_to_tower_matrix(admin_cells: Sequence, tower_cells: Sequence) -> np.ndarray:
+    return make_a_to_b_matrix(admin_cells, tower_cells)
 
 def make_admin_admin_matrix(tower_tower: np.ndarray, tower_admin: np.ndarray,
                             admin_tower: np.ndarray) -> np.ndarray:
@@ -130,4 +126,3 @@ def make_admin_admin_matrix(tower_tower: np.ndarray, tower_admin: np.ndarray,
         that day from the admin with index ``i`` to the admin with index ``j``.
     """
     return (tower_admin @ tower_tower) @ admin_tower
->>>>>>> 5da1db42e33a1c1855958c9cc3b55ae6848de4dc
