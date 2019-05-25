@@ -6,7 +6,7 @@ from typing import List, Optional, cast, Union, Iterator
 from shapely.geometry import MultiPolygon, Polygon, Point  # type: ignore
 from shapely.ops import unary_union  # type: ignore
 import numpy as np  # type: ignore
-from data_interface import TOWER_PREFIX, load_admin_cells, load_cells
+from data_interface import TOWER_PREFIX, load_admin_cells, load_voronoi_cells
 
 
 AREA_THRESHOLD = 0.0001
@@ -245,7 +245,7 @@ def validate_voronoi() -> Optional[str]:
         A description of a found error, or ``None`` if no error found.
     """
     try:
-        cells = load_cells()
+        cells = load_voronoi_cells()
     except (FileNotFoundError, IOError) as e:
         msg = repr(e)
         return f'Loading Voronoi cells failed with error: {msg}'

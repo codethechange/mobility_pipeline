@@ -44,16 +44,18 @@ def load_polygons_from_json(filepath) -> List[MultiPolygon]:
 
 
 def load_admin_cells() -> List[MultiPolygon]:
-    """Loads cells from the file at :py:const:`ADMIN_PATH`
+    """Loads the administrative region cells
+
+    Data is loaded from :py:const:`ADMIN_PATH`. This is a wrapper function for
+    :py:func:`load_polygons_from_json`.
 
     Returns:
-        See :py:mod:`load_polygons_from_json`. Each returned object represents
-        an administrative region of the country.
+        A list of the administrative region cells.
     """
     return load_polygons_from_json(ADMIN_PATH)
 
 
-def load_cells() -> List[MultiPolygon]:
+def load_voronoi_cells() -> List[MultiPolygon]:
     """Loads cells from the file at :py:const:`VORONOI_PATH`
 
     Returns:
