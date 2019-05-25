@@ -51,6 +51,14 @@ mobility\_pipeline.validate\_mobility\_coors module
     :undoc-members:
     :show-inheritance:
 
+mobility\_pipeline.visualize\_overlaps module
+---------------------------------------------
+
+.. automodule:: mobility_pipeline.visualize_overlaps
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
