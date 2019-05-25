@@ -125,7 +125,7 @@ def make_a_to_b_matrix(a_cells: List[MultiPolygon],
         MultiPolygon in B at index ``i`` that overlaps with the MultiPolygon in
         A at index ``j``.
     """
-    mat = np.zeros((len(a_cells), len(b_cells)))
+    mat = np.zeros((len(b_cells), len(a_cells)))
     a_rtree, tree_index_mapping = generate_rtree(a_cells)
     for i, bcell in enumerate(b_cells):
         overlapping_cells = a_rtree.query(bcell)
