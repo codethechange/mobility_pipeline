@@ -2,31 +2,28 @@
 
 """Generates the admin-to-admin mobility matrix from data files
 
-Currently only computes the tower-to-tower matrix.
+The data is loaded using the functions in :py:mod:`data_interface`, and the
+matrices are computed using the functions in :py:mod:`make_matrix`.
 """
-from matplotlib import pyplot as plt  # type: ignore
-from lib.make_matrix import make_tower_tower_matrix, generate_rtree, make_a_to_b_matrix
-from data_interface import load_mobility, load_towers, load_polygons_from_json
-from shapely.geometry import MultiPolygon  # type: ignore
-from descartes import PolygonPatch  # type: ignore
-from random import uniform as rand
-
-DATA_PATH = "data/"
-ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
-TOWER_PATH = "%sbrazil-towers-voronoi-mobility/brazil-voronoi.json" % DATA_PATH
-
-
-
+import numpy as np
+from lib.make_matrix import make_tower_tower_matrix, \
+    make_tower_to_admin_matrix, make_admin_to_tower_matrix, \
+    make_admin_admin_matrix
+from data_interface import load_mobility, load_towers, load_cells, \
+    load_admin_cells
 
 
 if __name__ == '__main__':
     # pragma pylint: disable=invalid-name
-    # mobility_df = load_mobility()
-    # towers_mat = load_towers()
+    mobility_df = load_mobility()
+    towers_mat = load_towers()
+    tower_cells = load_cells()
+    admin_cells = load_admin_cells()
 
-    # tower_tower_mat = make_tower_tower_matrix(mobility_df, len(towers_mat))
+    tower_tower_mat = make_tower_tower_matrix(mobility_df, len(towers_mat))
+    tower_admin_mat = make_tower_to_admin_matrix(tower_cells, admin_cells)
+    admin_tower_mat = make_admin_to_tower_matrix(admin_cells, tower_cells)
 
-    # test_overlap()
-
-
-
+    admin_admin_mat = make_admin_admin_matrix(tower_tower_mat, tower_admin_mat,
+                                              admin_tower_mat)
+    np.savetxt('admin_admin_mat.csv', admin_admin_mat, delimiter=',')
