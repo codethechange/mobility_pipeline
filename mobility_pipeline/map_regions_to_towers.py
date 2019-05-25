@@ -13,11 +13,11 @@ valid. Indices of cells without towers and coordinates are also printed.
 
 from shapely.geometry import Point  # type: ignore
 from lib.exploratory import map_cells_to_seeds
-from data_interface import load_towers, load_cells
+from data_interface import load_towers, load_voronoi_cells
 
 if __name__ == '__main__':
     # pragma pylint: disable=invalid-name
-    cells = load_cells()
+    cells = load_voronoi_cells()
 
     # Directed to numpy docs by https://stackoverflow.com/a/3519314
     towers_mat = load_towers()

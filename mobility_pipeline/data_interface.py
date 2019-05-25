@@ -54,7 +54,7 @@ def load_admin_cells() -> List[MultiPolygon]:
     return load_polygons_from_json(ADMIN_PATH)
 
 
-def load_cells() -> List[MultiPolygon]:
+def load_voronoi_cells() -> List[MultiPolygon]:
     """Loads the Voronoi cells from the file at :py:const:`VORONOI_PATH`.
 
     Returns:
