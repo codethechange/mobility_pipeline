@@ -43,14 +43,6 @@ mobility\_pipeline.plot\_voronoi module
     :undoc-members:
     :show-inheritance:
 
-mobility\_pipeline.validate\_mobility\_coors module
----------------------------------------------------
-
-.. automodule:: mobility_pipeline.validate_mobility_coors
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 mobility\_pipeline.visualize\_overlaps module
 ---------------------------------------------
 
