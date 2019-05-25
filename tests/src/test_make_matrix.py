@@ -5,8 +5,10 @@ from hypothesis import given
 from hypothesis.strategies import lists, integers
 import numpy as np
 import pandas as pd
+from shapely.geometry import MultiPolygon, Polygon
 from mobility_pipeline.lib.make_matrix import make_tower_tower_matrix, \
-    make_admin_admin_matrix
+    make_admin_admin_matrix, make_admin_to_tower_matrix, \
+    make_tower_to_admin_matrix
 
 
 PANDAS_COLUMNS = ['ORIGIN', 'DESTINATION', 'COUNT']
@@ -68,3 +70,34 @@ def test_make_matrix_simple():
 
     assert np.all(make_admin_admin_matrix(b, a, c) == (a @ b) @ c)
     assert np.all((a @ b) @ c == e)
+
+
+# Polygons for testing overlap calculation
+A = MultiPolygon([Polygon([(-6, -2), (2, 6), (2, 2), (-2, -2)])])
+B = MultiPolygon([Polygon([(-2, -2), (-2, 2), (2, 2), (2, -2)])])
+C = MultiPolygon([Polygon([(0, -4), (0, 0), (4, 0), (4, -4)])])
+D = MultiPolygon([Polygon([(2, -6), (2, -2), (4, -2), (4, -6)])])
+
+
+def test_make_tower_to_admin():
+    expected = [[8 / 16, 4 / 16],
+                [0, 4 / 8]]
+    expected = np.array(expected)
+
+    towers = [A, C]
+    admins = [B, D]
+    actual = make_tower_to_admin_matrix(towers, admins)
+
+    assert np.all(actual == expected)
+
+
+def test_make_admin_to_tower():
+    expected = [[8 / 24, 0],
+                [4 / 16, 4 / 16]]
+    expected = np.array(expected)
+
+    towers = [A, C]
+    admins = [B, D]
+    actual = make_admin_to_tower_matrix(admins, towers)
+
+    assert np.all(actual == expected)
