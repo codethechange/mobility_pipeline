@@ -132,7 +132,7 @@ def make_a_to_b_matrix(a_cells: List[MultiPolygon],
         for acell in overlapping_cells:
             # compute true overlap and update corresponding entry in matrix
             coords = tuple([tuple(pol.exterior.coords) for pol in acell])
-            mat[tree_index_mapping[coords]][i] = compute_overlap(bcell, acell)
+            mat[i][tree_index_mapping[coords]] = compute_overlap(bcell, acell)
     return mat
 
 
