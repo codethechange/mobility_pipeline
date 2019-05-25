@@ -136,8 +136,8 @@ def make_a_to_b_matrix(a_cells: List[MultiPolygon],
     return mat
 
 
-def make_tower_to_admin_matrix(admin_cells: List[MultiPolygon],
-                               tower_cells: List[MultiPolygon])\
+def make_tower_to_admin_matrix(tower_cells: List[MultiPolygon],
+                               admin_cells: List[MultiPolygon])\
         -> np.ndarray:
     """Compute the tower-to-admin matrix.
 
@@ -154,8 +154,8 @@ def make_tower_to_admin_matrix(admin_cells: List[MultiPolygon],
     return make_a_to_b_matrix(tower_cells, admin_cells)
 
 
-def make_admin_to_tower_matrix(tower_cells: List[MultiPolygon],
-                               admin_cells: List[MultiPolygon]) \
+def make_admin_to_tower_matrix(admin_cells: List[MultiPolygon],
+                               tower_cells: List[MultiPolygon]) \
         -> np.ndarray:
     """Compute the admin-to-tower matrix.
 
