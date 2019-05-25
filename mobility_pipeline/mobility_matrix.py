@@ -5,7 +5,7 @@
 The data is loaded using the functions in :py:mod:`data_interface`, and the
 matrices are computed using the functions in :py:mod:`make_matrix`.
 """
-import numpy as np
+import numpy as np  # type: ignore
 from lib.make_matrix import make_tower_tower_matrix, \
     make_tower_to_admin_matrix, make_admin_to_tower_matrix, \
     make_admin_admin_matrix
