@@ -27,6 +27,7 @@ ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
 TOWER_PREFIX = 'br'
 """The tower name is the tower index appended to this string"""
 
+
 def load_polygons_from_json(filepath) -> List[MultiPolygon]:
     """Loads cells from given filepath to JSON.
 
@@ -40,12 +41,17 @@ def load_polygons_from_json(filepath) -> List[MultiPolygon]:
     cells = [load_cell(feature['geometry']) for feature in raw_json['features']]
     return cells
 
+
 def load_admin_cells() -> List[MultiPolygon]:
+    """Loads the administrative region cells
+
+    Data is loaded from :py:const:`ADMIN_PATH`. This is a wrapper function for
+    :py:func:`load_polygons_from_json`.
+
+    Returns:
+        A list of the administrative region cells.
+    """
     return load_polygons_from_json(ADMIN_PATH)
-
-def load_tower_cells() -> List[MultiPolygon]:
-    return load_polygons_from_json(TOWERS_PATH)
-
 
 
 def load_cells() -> List[MultiPolygon]:
@@ -73,6 +79,7 @@ def load_towers() -> np.ndarray:
     towers_mat = np.genfromtxt(TOWERS_PATH, delimiter=',')
     towers_mat = towers_mat[1:, 1:]
     return towers_mat
+
 
 def load_mobility() -> pd.DataFrame:
     """Loads mobility data from the file at :py:const:`MOBILITY_PATH`.
