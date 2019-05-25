@@ -13,7 +13,7 @@ from lib.voronoi import load_cell
 # Thanks to abarnert at StackOverflow for how to document constants
 # https://stackoverflow.com/a/20227174
 
-DATA_PATH = "data/brazil-towers-voronoi-mobility/"
+DATA_PATH = "../data/brazil-towers-voronoi-mobility/"
 """Path to folder containing towers, voronoi, and mobility data"""
 
 TOWERS_PATH = "%stowers_br.csv" % DATA_PATH
@@ -23,6 +23,7 @@ VORONOI_PATH = "%sbrazil-voronoi.json" % DATA_PATH
 MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
 ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
+"""Relative to :py:const:`DATA_PATH`, path to country shapefile"""
 
 TOWER_PREFIX = 'br'
 """The tower name is the tower index appended to this string"""
@@ -55,17 +56,13 @@ def load_admin_cells() -> List[MultiPolygon]:
 
 
 def load_voronoi_cells() -> List[MultiPolygon]:
-    """Loads the Voronoi cells from the file at :py:const:`VORONOI_PATH`.
+    """Loads cells from the file at :py:const:`VORONOI_PATH`
 
     Returns:
-        A list of :py:mod:`shapely.geometry.MultiPolygon` objects, each of which
-        describes a cell. If the cell can be described as a single polygon, the
-        returned MultiPolygon will contain only 1 polygon.
+        See :py:mod:`load_polygons_from_json`. Each returned object represents
+        a Voronoi cell.
     """
-    with open(VORONOI_PATH, 'r') as f:
-        raw_json = json.loads(f.read())
-    cells = [load_cell(feature['geometry']) for feature in raw_json['features']]
-    return cells
+    return load_polygons_from_json(VORONOI_PATH)
 
 
 def load_towers() -> np.ndarray:
