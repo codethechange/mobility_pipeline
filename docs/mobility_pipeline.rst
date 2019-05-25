@@ -11,18 +11,18 @@ Subpackages
 Submodules
 ----------
 
-mobility\_pipeline.data\_interface module
------------------------------------------
+mobility\_pipeline.check\_validation module
+-------------------------------------------
 
-.. automodule:: mobility_pipeline.data_interface
+.. automodule:: mobility_pipeline.check_validation
     :members:
     :undoc-members:
     :show-inheritance:
 
-mobility\_pipeline.map\_regions\_to\_towers module
---------------------------------------------------
+mobility\_pipeline.data\_interface module
+-----------------------------------------
 
-.. automodule:: mobility_pipeline.map_regions_to_towers
+.. automodule:: mobility_pipeline.data_interface
     :members:
     :undoc-members:
     :show-inheritance:
@@ -47,6 +47,14 @@ mobility\_pipeline.validate\_mobility\_coors module
 ---------------------------------------------------
 
 .. automodule:: mobility_pipeline.validate_mobility_coors
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mobility\_pipeline.visualize\_overlaps module
+---------------------------------------------
+
+.. automodule:: mobility_pipeline.visualize_overlaps
     :members:
     :undoc-members:
     :show-inheritance:
