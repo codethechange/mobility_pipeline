@@ -1,10 +1,5 @@
-.. UNICEF Mobility Pipeline documentation master file, created by
-   sphinx-quickstart on Fri Apr 12 20:27:24 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to UNICEF Mobility Pipeline's documentation!
-====================================================
+Documentation for UNICEF Mobility Pipeline
+==========================================
 
 .. image:: https://travis-ci.com/codethechange/mobility_pipeline.svg?branch=master
     :target: https://travis-ci.com/codethechange/mobility_pipeline
@@ -22,6 +17,8 @@ Welcome to UNICEF Mobility Pipeline's documentation!
 
    Getting Started <generated/GETTING_STARTED>
    Contributing <generated/CONTRIBUTING>
+   User Manual <user_manual>
+   Developer Manual <dev_manual>
    Code Documentation <modules>
 
 To get started, see our `getting started guide <generated/GETTING_STARTED.html>`_.
@@ -30,6 +27,17 @@ If you would like to contribute, see our
 
 This project is hosted on GitHub at
 https://github.com/codethechange/mobility_pipeline
+
+Project Overview
+----------------
+
+mobility_pipeline uses the relative geographical positions of cell towers and
+administrative regions (e.g. provinces) to transform mobility data describing
+how people move between cell towers into data on how people move between
+administrative regions. This lets us turn cell tower movement data that
+telecommunications providers already have into data on migration patters between
+political regions, which is what governments and NGOs need to plan disaster
+relief efforts.
 
 Legal
 -----
