@@ -4,6 +4,9 @@
 
 The data is loaded using the functions in :py:mod:`data_interface`, and the
 matrices are computed using the functions in :py:mod:`make_matrix`.
+
+If you have already converted the shapefile into a JSON, comment out the
+conversion lines in this script. This conversion is slow!
 """
 import numpy as np  # type: ignore
 from lib.make_matrix import make_tower_tower_matrix, \
@@ -16,7 +19,8 @@ from data_interface import convert_shape_to_json, load_mobility, load_towers, lo
 if __name__ == '__main__':
     # pragma pylint: disable=invalid-name
 
-    #comment out the following lines if already have json file with admin regions
+    # comment out the following 3 lines if you have already converted the
+    # shapefile to a JSON
     print('Converting Shapefile to JSON')
     convert_shape_to_json()
     print('Finished conversion')
