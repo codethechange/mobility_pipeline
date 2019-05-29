@@ -5,6 +5,7 @@ This file is specific to the data files we are using and their format.
 
 import json
 from typing import List
+import shapefile # type: ignore
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
@@ -22,9 +23,10 @@ VORONOI_PATH = "%sbrazil-voronoi.json" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to Voronoi JSON file"""
 MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
+ADMIN_SHAPE_PATH = "%sgadm36_BRA_2" % DATA_PATH
+"""Relative to py:const:`DATA_PATH`, path to administrative region shape file"""
 ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to country shapefile"""
-
 TOWER_PREFIX = 'br'
 """The tower name is the tower index appended to this string"""
 
@@ -41,6 +43,28 @@ def load_polygons_from_json(filepath) -> List[MultiPolygon]:
         raw_json = json.loads(f.read())
     cells = [load_cell(feature['geometry']) for feature in raw_json['features']]
     return cells
+
+
+def convert_shape_to_json() -> None:
+    """Converts shapefile containing administrative regions to GeoJSON format
+
+    Returns:
+        None
+    """
+    # read the shapefile
+    reader = shapefile.Reader(ADMIN_SHAPE_PATH)
+    fields = reader.fields[1:]
+    field_names = [field[0] for field in fields]
+    buffer = []
+    for shape_record in reader.shapeRecords():
+        atr = dict(zip(field_names, shape_record.record))
+        geom = shape_record.shape.__geo_interface__
+        buffer.append(dict(type="Feature", geometry=geom, properties=atr))
+    # write the GeoJSON file
+    geojson = open(ADMIN_PATH, "w")
+    geojson.write(json.dumps({"type": "FeatureCollection", "features": buffer},
+                             indent=2) + "\n")
+    geojson.close()
 
 
 def load_admin_cells() -> List[MultiPolygon]:
