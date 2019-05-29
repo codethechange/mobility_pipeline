@@ -5,7 +5,7 @@ This file is specific to the data files we are using and their format.
 
 import json
 from typing import List
-import shapefile
+import shapefile # type: ignore
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
@@ -24,7 +24,7 @@ VORONOI_PATH = "%sbrazil-voronoi.json" % DATA_PATH
 MOBILITY_PATH = "%smobility_matrix_20150201.csv" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
 ADMIN_SHAPE_PATH = "%sgadm36_BRA_2" % DATA_PATH
-"""Relative to py:const:`DATA_PATH`, path to administrative region shape files, need to append shp, dbf, shx file extensions"""
+"""Relative to py:const:`DATA_PATH`, path to administrative region shape files"""
 ADMIN_PATH = "%sbr_admin2.json" % DATA_PATH
 """Relative to :py:const:`DATA_PATH`, path to country shapefile"""
 TOWER_PREFIX = 'br'
@@ -55,8 +55,7 @@ def convert_shape_to_json() -> None:
     for sr in reader.shapeRecords():
         atr = dict(zip(field_names, sr.record))
         geom = sr.shape.__geo_interface__
-        buffer.append(dict(type="Feature", \
-        geometry=geom, properties=atr)) 
+        buffer.append(dict(type="Feature", geometry=geom, properties=atr))
     # write the GeoJSON file
     geojson = open(ADMIN_PATH, "w")
     geojson.write(json.dumps({"type": "FeatureCollection", "features": buffer}, indent=2) + "\n")

@@ -16,8 +16,11 @@ from data_interface import convert_shape_to_json, load_mobility, load_towers, lo
 if __name__ == '__main__':
     # pragma pylint: disable=invalid-name
 
-    #comment out the following line if already have json file with admin regions
-    print('Converting Shapefile to JSON'); convert_shape_to_json(); print('Finished conversion')
+    #comment out the following lines if already have json file with admin regions
+    print('Converting Shapefile to JSON')
+    convert_shape_to_json()
+    print('Finished conversion')
+
     print('Loading data...')
     mobility_df = load_mobility()
     towers_mat = load_towers()
