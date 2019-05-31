@@ -17,4 +17,7 @@ https://unicef-mobility-pipeline.readthedocs.io/en/latest/
 
 This project was created by
 [Stanford Code the Change](http://codethechange.stanford.edu) for UNICEF.
-It is available under the license in [`LICENSE.txt`](LICENSE.txt).
+
+Copyright &copy; 2019 Members of the 2018-2019 Stanford Code the Change
+UNICEF Team. This work is available under the license in
+[`LICENSE.txt`](LICENSE.txt).

@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath('../mobility_pipeline'))
 # -- Project information -----------------------------------------------------
 
 project = 'UNICEF Mobility Pipeline'
-copyright = '2019'
+copyright = '2019 Members of the 2018-2019 Stanford Code the Change UNICEF Team'
 author = 'Stanford Code the Change (http://codethechange.stanford.edu)'
 
 
