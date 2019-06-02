@@ -11,7 +11,11 @@ To get started, see our [getting started guide](GETTING_STARTED.rst). If you'd
 like to contribute, see our [contributing guide](CONTRIBUTING.rst).
 
 For more detailed documentation, see our hosted documentation at
-https://unicef-mobility-pipeline.readthedocs.io/en/latest/
+https://unicef-mobility-pipeline.readthedocs.io/en/latest/.
+
+We also have a slide deck that summarizes our work. It is available in
+PDF form [here](slides.pdf) and on Google Slides
+[here](https://docs.google.com/presentation/d/1RtuKY8tn8ZWfPd_VJTUAqpDjzXHs_Zgoz8UkDpLwWU8/edit?usp=sharing).
 
 ## Legal
 
