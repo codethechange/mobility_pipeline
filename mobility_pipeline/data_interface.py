@@ -3,6 +3,7 @@
 This file is specific to the data files we are using and their format.
 """
 
+from os import path
 import json
 from typing import List
 import shapefile # type: ignore
@@ -14,7 +15,7 @@ from lib.voronoi import load_cell
 # Thanks to abarnert at StackOverflow for how to document constants
 # https://stackoverflow.com/a/20227174
 
-DATA_PATH = "../data/brazil-towers-voronoi-mobility/"
+DATA_PATH = "data/brazil-towers-voronoi-mobility/"
 """Path to folder containing towers, voronoi, and mobility data"""
 
 TOWERS_PATH = f"{DATA_PATH}towers_br.csv"
@@ -36,6 +37,8 @@ ADMIN_TOWER_TEMPLATE = f"{DATA_PATH}/%s-admin-to-tower.csv"
 """Template that uses country identifier to make path to admin_tower matrix"""
 ADMIN_ADMIN_TEMPLATE = f"{DATA_PATH}/%s-%s-admin-to-admin.csv"
 """Path to admin-to-admin matrix, accepts substitutions of country_id, day_id"""
+ADMIN_GEOJSON_TEMPLATE = f"{DATA_PATH}/%s-shape.json"
+"""Path to admin GeoJSON file, accepts substitution of country_id"""
 
 
 def load_polygons_from_json(filepath) -> List[MultiPolygon]:
@@ -52,14 +55,26 @@ def load_polygons_from_json(filepath) -> List[MultiPolygon]:
     return cells
 
 
-def convert_shape_to_json() -> None:
+def convert_shape_to_json(shapefile_path_prefix: str, country_id: str) -> None:
     """Converts shapefile containing administrative regions to GeoJSON format
+
+    The GeoJSON file is saved at ADMIN_GEOJSON_TEMPLATE % country_id
+
+    Arguments:
+        shapefile_path_prefix: Path to the .shp or .dbf shapefile, optionally
+            without the file extension. Both the .shp and .dbf files must be
+            present in the same directory and with the same name (except file
+            extension).
+        country_id: Unique identifier for the country and admin level.
 
     Returns:
         None
     """
     # read the shapefile
-    reader = shapefile.Reader(ADMIN_SHAPE_PATH)
+    base, extension = path.splitext(shapefile_path_prefix)
+    if extension.lower() in [".shp", ".dbf"]:
+        shapefile_path_prefix = base
+    reader = shapefile.Reader(shapefile_path_prefix)
     fields = reader.fields[1:]
     field_names = [field[0] for field in fields]
     buffer = []
@@ -68,7 +83,7 @@ def convert_shape_to_json() -> None:
         geom = shape_record.shape.__geo_interface__
         buffer.append(dict(type="Feature", geometry=geom, properties=atr))
     # write the GeoJSON file
-    geojson = open(ADMIN_PATH, "w")
+    geojson = open(ADMIN_GEOJSON_TEMPLATE % country_id, "w")
     geojson.write(json.dumps({"type": "FeatureCollection", "features": buffer},
                              indent=2) + "\n")
     geojson.close()
@@ -86,14 +101,17 @@ def load_admin_cells(identifier: str) -> List[MultiPolygon]:
     return load_polygons_from_json(ADMIN_PATH % identifier)
 
 
-def load_voronoi_cells() -> List[MultiPolygon]:
-    """Loads cells from the file at :py:const:`VORONOI_PATH`
+def load_voronoi_cells(voronoi_path: str) -> List[MultiPolygon]:
+    """Loads cells
+
+    Arguments:
+        voronoi_path: Path to file to load cells from
 
     Returns:
         See :py:mod:`load_polygons_from_json`. Each returned object represents
         a Voronoi cell.
     """
-    return load_polygons_from_json(VORONOI_PATH)
+    return load_polygons_from_json(voronoi_path)
 
 
 def load_towers() -> np.ndarray:
@@ -141,6 +159,16 @@ def save_admin_admin(country_id: str, day_id: str,
     path = ADMIN_ADMIN_TEMPLATE % (country_id, day_id)
     serialize_mat(admin_admin, path)
     return path
+
+
+def save_tower_admin(country_id: str, mat: np.ndarray) -> None:
+    file_path = TOWER_ADMIN_TEMPLATE % country_id
+    serialize_mat(mat, file_path)
+
+
+def save_admin_tower(country_id: str, mat: np.ndarray) -> None:
+    file_path = ADMIN_TOWER_TEMPLATE % country_id
+    serialize_mat(mat, file_path)
 
 
 def serialize_mat(mat: np.ndarray, path: str) -> None:
