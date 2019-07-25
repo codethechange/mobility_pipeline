@@ -29,7 +29,7 @@ The following files must be present under the directory at DATA_PATH:
 * [identifier]-admin-to-tower.csv: Admin-to-tower matrix"""
 
 
-if __name__ == "__main__":
+def main():
     parser = ArgumentParser(
         description=DESC,
         epilog="""https://github.com/codethechange/mobility_pipeline""",
@@ -58,4 +58,6 @@ if __name__ == "__main__":
     path = save_admin_admin(args.country_id, args.day_id, admin_admin_mat)
     print(f"Admin-to-Admin Matrix saved as {path}")
 
-# TODO: Update rest of code to match this new interface
+
+if __name__ == "__main__":
+    main()
