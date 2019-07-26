@@ -3,7 +3,7 @@
 
 import csv
 from mobility_pipeline.data_interface import TOWERS_PATH, MOBILITY_PATH, \
-    load_voronoi_cells, load_towers, VORONOI_PATH
+    load_voronoi_cells, load_towers, VORONOI_PATH, COUNTRY_ID
 from mobility_pipeline.lib.validate import validate_mobility, validate_admins, \
     validate_voronoi, validate_tower_cells_aligned, \
     validate_tower_index_name_aligned
@@ -45,13 +45,13 @@ def validate_data_files() -> bool:
             print(f'INVALID tower index alignment: {align_error}')
             return False
         print('SUCCESS: Tower indices aligned')
-        towers = load_towers()
+        towers = load_towers(TOWERS_PATH)
     finally:
         if f:
             f.close()
 
     # Load and validate Voronoi
-    voronoi_errs = validate_voronoi()
+    voronoi_errs = validate_voronoi(VORONOI_PATH)
     if voronoi_errs:
         print(f'INVALID Voronoi: {voronoi_errs}')
         return False
@@ -85,7 +85,7 @@ def validate_data_files() -> bool:
             f.close()
 
     # Validate Admins
-    admin_errs = validate_admins()
+    admin_errs = validate_admins(COUNTRY_ID)
     if admin_errs:
         print(f'INVALID Admins: {admin_errs}')
         return False

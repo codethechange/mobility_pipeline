@@ -10,7 +10,6 @@ from data_interface import (
     TOWER_PREFIX,
     load_admin_cells,
     load_voronoi_cells,
-    VORONOI_PATH,
 )
 
 
@@ -20,9 +19,6 @@ between the area of the union of polygons and the sum of
 the polygons' individual areas. Agreement between these values indicates the
 polygons are disjoint and contiguous. Threshold was chosen based on the
 deviances in known good Voronoi tessellations."""
-
-COUNTRY_ID = "br"
-"""Country identifier"""
 
 
 def all_numeric(string: str) -> bool:
@@ -211,8 +207,10 @@ def validate_contiguous_disjoint_cells(
     return None
 
 
-def validate_admins() -> Optional[str]:
+def validate_admins(country_id) -> Optional[str]:
     """Check that the admins defined in the shapefile are reasonable
+
+    Admins are loaded using :py:func:`load_admin_cells`.
 
     Checks:
 
@@ -222,12 +220,15 @@ def validate_admins() -> Optional[str]:
       should be equal.
     * That at least one cell is loaded.
 
+    Arguments:
+        country_id: Country identifier.
+
     Returns:
         A description of a found error, or ``None`` if no error found.
     """
 
     try:
-        admins = load_admin_cells(COUNTRY_ID)
+        admins = load_admin_cells(country_id)
     except (FileNotFoundError, IOError) as e:
         msg = repr(e)
         return f'Loading admins failed with error: {msg}'
@@ -238,7 +239,7 @@ def validate_admins() -> Optional[str]:
     return None
 
 
-def validate_voronoi() -> Optional[str]:
+def validate_voronoi(voronoi_path) -> Optional[str]:
     """Check that the Voronoi cells are reasonable
 
     Checks:
@@ -253,7 +254,7 @@ def validate_voronoi() -> Optional[str]:
         A description of a found error, or ``None`` if no error found.
     """
     try:
-        cells = load_voronoi_cells(VORONOI_PATH)
+        cells = load_voronoi_cells(voronoi_path)
     except (FileNotFoundError, IOError) as e:
         msg = repr(e)
         return f'Loading Voronoi cells failed with error: {msg}'

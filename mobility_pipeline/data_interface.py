@@ -6,7 +6,7 @@ This file is specific to the data files we are using and their format.
 from os import path
 import json
 from typing import List
-import shapefile # type: ignore
+import shapefile  # type: ignore
 import numpy as np  # type: ignore
 import pandas as pd  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
@@ -26,10 +26,10 @@ MOBILITY_PATH = f"{DATA_PATH}mobility_matrix_20150201.csv"
 """Relative to :py:const:`DATA_PATH`, path to mobility CSV file"""
 ADMIN_SHAPE_PATH = f"{DATA_PATH}gadm36_BRA_2"
 """Relative to py:const:`DATA_PATH`, path to administrative region shape file"""
-ADMIN_PATH = f"{DATA_PATH}%s-shape.json"
-"""Relative to :py:const:`DATA_PATH`, path to country shapefile"""
-TOWER_PREFIX = 'br'
+TOWER_PREFIX = "br"
 """The tower name is the tower index appended to this string"""
+COUNTRY_ID = "br"
+"""Country identifier"""
 
 TOWER_ADMIN_TEMPLATE = f"{DATA_PATH}/%s-tower-to-admin.csv"
 """Template that uses country identifier to make path to tower_admin matrix"""
@@ -92,13 +92,13 @@ def convert_shape_to_json(shapefile_path_prefix: str, country_id: str) -> None:
 def load_admin_cells(identifier: str) -> List[MultiPolygon]:
     """Loads the administrative region cells
 
-    Data is loaded from :py:const:`ADMIN_PATH` ``% identifier``. This is a
-    wrapper function for :py:func:`load_polygons_from_json`.
+    Data is loaded from :py:const:`ADMIN_GEOJSON_TEMPLATE` ``% identifier``.
+    This is a wrapper function for :py:func:`load_polygons_from_json`.
 
     Returns:
         A list of the administrative region cells.
     """
-    return load_polygons_from_json(ADMIN_PATH % identifier)
+    return load_polygons_from_json(ADMIN_GEOJSON_TEMPLATE % identifier)
 
 
 def load_voronoi_cells(voronoi_path: str) -> List[MultiPolygon]:
@@ -114,15 +114,18 @@ def load_voronoi_cells(voronoi_path: str) -> List[MultiPolygon]:
     return load_polygons_from_json(voronoi_path)
 
 
-def load_towers() -> np.ndarray:
-    """Loads the tower positions from the file at :py:const:`TOWERS_PATH`.
+def load_towers(towers_path: str) -> np.ndarray:
+    """Loads the tower positions from a file
+
+    Arguments:
+        towers_path: Path to towers file
 
     Returns:
         A matrix of tower coordinates with columns ``[longitude, latitude]`` and
         one tower per row. Row indices match the numeric portions of tower
         names.
     """
-    towers_mat = np.genfromtxt(TOWERS_PATH, delimiter=',')
+    towers_mat = np.genfromtxt(towers_path, delimiter=',')
     towers_mat = towers_mat[1:, 1:]
     return towers_mat
 

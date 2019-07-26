@@ -11,13 +11,16 @@ from matplotlib import pyplot as plt  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
 from descartes import PolygonPatch  # type: ignore
 from lib.make_matrix import make_a_to_b_matrix
-from data_interface import load_admin_cells, load_voronoi_cells, VORONOI_PATH
+from data_interface import (
+    load_admin_cells,
+    load_voronoi_cells,
+    VORONOI_PATH,
+    COUNTRY_ID,
+)
 
 
 I_TOWER_TO_COLOR = 1
 """Index of Voronoi cell to show."""
-COUNTRY_ID = "br"
-"""Identifier of country/admin level"""
 
 
 def plot_polygon(axes: plt.axes, polygon: MultiPolygon, color, _label="") \
