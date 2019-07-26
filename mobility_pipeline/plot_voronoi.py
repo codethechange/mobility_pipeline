@@ -11,7 +11,12 @@ green, while other towers are shown in red.
 from matplotlib import pyplot as plt  # type: ignore
 from shapely.geometry import MultiPolygon  # type: ignore
 from descartes import PolygonPatch  # type: ignore
-from data_interface import load_voronoi_cells, load_towers
+from data_interface import(
+    load_voronoi_cells,
+    load_towers,
+    VORONOI_PATH,
+    TOWERS_PATH,
+)
 
 
 def plot_polygon(axes: plt.axes, polygon: MultiPolygon) -> None:
@@ -31,8 +36,8 @@ def plot_polygon(axes: plt.axes, polygon: MultiPolygon) -> None:
 
 if __name__ == '__main__':
     # pragma pylint: disable=invalid-name
-    cells = load_voronoi_cells()
-    towers = load_towers()
+    cells = load_voronoi_cells(VORONOI_PATH)
+    towers = load_towers(TOWERS_PATH)
     print('Number of Cells: ', len(cells), 'Number of Towers: ', len(towers))
 
     # Learned how to plot from:

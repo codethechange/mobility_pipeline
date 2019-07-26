@@ -56,15 +56,23 @@ For details on the required formats of these files, see the documentation for
 Running the Program
 -------------------
 
-To generate the admin-to-admin mobility matrix, execute the
-``mobility_matrix.py`` script. It will generate a ``admin_admin_mat.csv`` file
-containing the mobility matrix.
+There are 2 scripts:
+
+* ``gen_country_matrices.py``: run once for each admin level / country you want
+  data for. It will generate the admin-to-tower and tower-to-admin matrices.
+* ``gen_day_mobility.py``: run for each day's worth of data. It will compute
+  the admin-to-admin mobility data.
+
+For both scripts, run with ``--help`` for more usage information. Both scripts
+also run independently of the path constants in ``data_interface.py``. Instead,
+they accept command-line arguments that define their operation.
 
 -----------------
 Running Utilities
 -----------------
 
-This program also comes with utilities for doing the following:
+This program also comes with utilities. These utilities use the constants in
+``data_interface.py`` for the most part.
 
 Plot Voronoi
 ============
