@@ -27,10 +27,18 @@ mobility\_pipeline.data\_interface module
     :undoc-members:
     :show-inheritance:
 
-mobility\_pipeline.mobility\_matrix module
-------------------------------------------
+mobility\_pipeline.gen\_country\_matrices module
+------------------------------------------------
 
-.. automodule:: mobility_pipeline.mobility_matrix
+.. automodule:: mobility_pipeline.gen_country_matrices
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mobility\_pipeline.gen\_day\_mobility module
+--------------------------------------------
+
+.. automodule:: mobility_pipeline.gen_day_mobility
     :members:
     :undoc-members:
     :show-inheritance:

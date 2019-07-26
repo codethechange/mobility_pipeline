@@ -57,6 +57,7 @@ Running the Program
 -------------------
 
 There are 2 scripts:
+
 * ``gen_country_matrices.py``: run once for each admin level / country you want
   data for. It will generate the admin-to-tower and tower-to-admin matrices.
 * ``gen_day_mobility.py``: run for each day's worth of data. It will compute
