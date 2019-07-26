@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+"""Generate admin-to-tower and tower-to-admin matries for a country"""
+
 from argparse import ArgumentParser
 from os import path
 
@@ -32,6 +35,7 @@ as [country_id]-shape.json under DATA_PATH."""
 
 
 def main():
+    """Main function called when script run"""
     parser = ArgumentParser(
         description=DESC,
         epilog="""https://github.com/codethechange/mobility_pipeline""",

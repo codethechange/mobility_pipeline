@@ -127,8 +127,8 @@ def load_towers() -> np.ndarray:
     return towers_mat
 
 
-def load_mobility(path: str) -> pd.DataFrame:
-    """Loads mobility data from the file at ``path``.
+def load_mobility(mobility_path: str) -> pd.DataFrame:
+    """Loads mobility data from the file at ``mobility_path``.
 
     Returns:
         A :py:class:`pandas.DataFrame` with columns ``ORIGIN``, ``DESTINATION``,
@@ -137,43 +137,118 @@ def load_mobility(path: str) -> pd.DataFrame:
         numeric portions strictly increase in ``ORIGIN``-major order, but rows
         may be missing if they would have had a ``COUNT`` value of ``0``.
     """
-    df = pd.read_csv(path)
+    df = pd.read_csv(mobility_path)
     del df['DATE']
     df['ORIGIN'] = df['ORIGIN'].str[2:].astype(np.int)
     df['DESTINATION'] = df['DESTINATION'].str[2:].astype(np.int)
     return df
 
 
-def load_tower_admin(country_id: str):
-    path = TOWER_ADMIN_TEMPLATE % country_id
-    return deserialize_mat(path)
+def load_tower_admin(country_id: str) -> np.ndarray:
+    """Load tower-to-admin matrix
+
+    Data loaded from :py:const:`TOWER_ADMIN_TEMPLATE` ``% country_id``.
+
+    Args:
+        country_id: Country identifier
+
+    Returns:
+        The tower-to-admin matrix
+    """
+    file_path = TOWER_ADMIN_TEMPLATE % country_id
+    return deserialize_mat(file_path)
 
 
-def load_admin_tower(country_id: str):
-    path = ADMIN_TOWER_TEMPLATE % country_id
-    return deserialize_mat(path)
+def load_admin_tower(country_id: str) -> np.ndarray:
+    """Load admin-to-tower matrix
+
+    Data loaded from :py:const:`ADMIN_TOWER_TEMPLATE` ``% country_id``.
+
+    Args:
+        country_id: Country identifier
+
+    Returns:
+        The admin-to-tower matrix
+    """
+    mat_path = ADMIN_TOWER_TEMPLATE % country_id
+    return deserialize_mat(mat_path)
 
 
 def save_admin_admin(country_id: str, day_id: str,
                      admin_admin: np.ndarray) -> str:
-    path = ADMIN_ADMIN_TEMPLATE % (country_id, day_id)
-    serialize_mat(admin_admin, path)
-    return path
+    """Save admin-to-admin matrix
+
+    Saved to :py:const:`ADMIN_ADMIN_TEMPLATE` ``% (country_id, day_id)``.
+
+    Args:
+        country_id: Country identifier
+        day_id: Day identifier
+        admin_admin: Admin-to-admin matrix to save
+
+    Returns:
+        Path at which matrix was saved
+    """
+    file_path = ADMIN_ADMIN_TEMPLATE % (country_id, day_id)
+    serialize_mat(admin_admin, file_path)
+    return file_path
 
 
 def save_tower_admin(country_id: str, mat: np.ndarray) -> None:
+    """Save tower-to-admin matrix
+
+    Saved to :py:const:`TOWER_ADMIN_TEMPLATE` ``% country_id``.
+
+    Args:
+        country_id: Country identifier
+        mat: Matrix to save
+
+    Returns:
+        None
+    """
     file_path = TOWER_ADMIN_TEMPLATE % country_id
     serialize_mat(mat, file_path)
 
 
 def save_admin_tower(country_id: str, mat: np.ndarray) -> None:
+    """Save admin-to-tower matrix
+
+    Saved to :py:const:`ADMIN_TOWER_TEMPLATE` ``% country_id``.
+
+    Args:
+        country_id: Country identifier
+        mat: Matrix to save
+
+    Returns:
+        None
+    """
     file_path = ADMIN_TOWER_TEMPLATE % country_id
     serialize_mat(mat, file_path)
 
 
-def serialize_mat(mat: np.ndarray, path: str) -> None:
-    np.savetxt(path, mat, delimiter=',')
+def serialize_mat(mat: np.ndarray, mat_path: str) -> None:
+    """Save a matrix to a file
+
+    Matrix is saved such that it can be recovered by :py:func:`deserialize_mat`.
+
+    Args:
+        mat: Matrix to save
+        mat_path: File to save matrix to
+
+    Returns:
+        None
+    """
+    np.savetxt(mat_path, mat, delimiter=',')
 
 
-def deserialize_mat(path: str) -> np.ndarray:
-    return np.genfromtxt(path, delimiter=',')
+def deserialize_mat(mat_path: str) -> np.ndarray:
+    """Deserialize a matrix from a file
+
+    File must have been created by :py:func:`serialize_mat`.
+
+    Args:
+        mat_path: Path of matrix file
+
+    Returns:
+        Deserialized matrix
+    """
+    return np.genfromtxt(mat_path, delimiter=',')

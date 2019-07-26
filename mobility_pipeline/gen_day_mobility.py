@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+
+"""Generate admin-to-admin mobility matrix for a single day"""
+
 from argparse import ArgumentParser
 from os import path
 
@@ -15,7 +18,7 @@ from lib.make_matrix import (
 )
 
 
-DESC = f"""Compute the admin-to-admin matrix for one day's data
+DESCRIPTION = f"""Compute the admin-to-admin matrix for one day's data
 
 Meant to be run once for each day you want mobility data for.
 
@@ -30,8 +33,9 @@ The following files must be present under the directory at DATA_PATH:
 
 
 def main():
+    """Called when script run"""
     parser = ArgumentParser(
-        description=DESC,
+        description=DESCRIPTION,
         epilog="""https://github.com/codethechange/mobility_pipeline""",
     )
     parser.add_argument("country_id", action="store",
@@ -55,8 +59,8 @@ def main():
     admin_admin_mat = make_admin_admin_matrix(tower_tower_mat, tower_admin_mat,
                                               admin_tower_mat)
     print("Saving admin-to-admin matrix")
-    path = save_admin_admin(args.country_id, args.day_id, admin_admin_mat)
-    print(f"Admin-to-Admin Matrix saved as {path}")
+    mat_path = save_admin_admin(args.country_id, args.day_id, admin_admin_mat)
+    print(f"Admin-to-Admin Matrix saved as {mat_path}")
 
 
 if __name__ == "__main__":
