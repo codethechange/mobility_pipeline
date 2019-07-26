@@ -4,8 +4,7 @@
 [![codecov](https://codecov.io/gh/codethechange/mobility_pipeline/branch/master/graph/badge.svg)](https://codecov.io/gh/codethechange/mobility_pipeline)
 [![Documentation Status](https://readthedocs.org/projects/unicef-mobility-pipeline/badge/?version=latest)](https://unicef-mobility-pipeline.readthedocs.io/en/latest/?badge=latest)
 
-`mobility_pipeline` is a set of tools for processing mobility data. It is in
-the very early stages of development.
+`mobility_pipeline` is a set of tools for processing mobility data.
 
 To get started, see our [getting started guide](GETTING_STARTED.rst). If you'd
 like to contribute, see our [contributing guide](CONTRIBUTING.rst).
