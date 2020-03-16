@@ -6,6 +6,11 @@
 
 `mobility_pipeline` is a set of tools for processing mobility data.
 
+**WARNING**: This project is no longer maintained. If you are interested
+in using it, please let us know! We may be able to begin maintaining it
+again. You can contact us by emailing the leadership of Stanford Code
+the Change listed on our [website](http://codethechange.stanford.edu).
+
 To get started, see our [getting started guide](GETTING_STARTED.rst). If you'd
 like to contribute, see our [contributing guide](CONTRIBUTING.rst).
 
